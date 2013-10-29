@@ -1,1 +1,1 @@
-include ':RemoteLight'
+include ':RemoteLight', ':SSH', ':libs'

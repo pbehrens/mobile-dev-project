@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyApplicationProject.iml" filepath="$PROJECT_DIR$/MyApplicationProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/RemoteLight/RemoteLight.iml" filepath="$PROJECT_DIR$/RemoteLight/RemoteLight.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SSH/SSH.iml" filepath="$PROJECT_DIR$/SSH/SSH.iml" />
     </modules>
   </component>
 </project>
