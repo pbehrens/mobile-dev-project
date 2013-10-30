@@ -11,6 +11,8 @@ import com.jcraft.jsch.Session;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 
@@ -48,25 +50,61 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
                 channel.connect();
                 if(channel.isConnected()){
                     Log.e("ssh", "connected");
-                    ChannelExec channelssh = (ChannelExec)
-                            session.openChannel("exec");
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    channelssh.setOutputStream(baos);
+//                    ChannelExec channelssh = (ChannelExec)
+//                            session.openChannel("exec");
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    channelssh.setOutputStream(baos);
+//
+//                    // Execute command
+//                    channelssh.setCommand("ls");
+//                    channelssh.connect();
+//                    channelssh.disconnect();
+                    Channel channel= session.openChannel("exec");
+                    ((ChannelExec)channel).setCommand("ls");
 
-                    // Execute command
-                    channelssh.setCommand("ls");
-                    channelssh.connect();
-                    channelssh.disconnect();
+// X Forwarding
+// channel.setXForwarding(true);
 
-                    Log.e("ssh-AA", baos.toString());
+//channel.setInputStream(System.in);
+                    channel.setInputStream(null);
+
+//channel.setOutputStream(System.out);
+
+//FileOutputStream fos=new FileOutputStream("/tmp/stderr");
+//((ChannelExec)channel).setErrStream(fos);
+                    ((ChannelExec)channel).setErrStream(System.err);
+
+                    InputStream in=channel.getInputStream();
+
+                    channel.connect();
+
+                    byte[] tmp=new byte[1024];
+                    while(true){
+                        while(in.available()>0){
+                            int i=in.read(tmp, 0, 1024);
+                            if(i<0)break;
+                            System.out.print(new String(tmp, 0, i));
+                            Log.e("ssh", new String(tmp, 0, i));
+                        }
+                        if(channel.isClosed()){
+                            System.out.println("exit-status: "+channel.getExitStatus());
+                            break;
+                        }
+                        try{Thread.sleep(1000);}catch(Exception ee){}
+                    }
+                    channel.disconnect();
+                    session.disconnect();
                 }
-                else{
-                    Log.e("ssh", "not connected");
-                }
-            } catch (JSchException e) {
-                // TODO Auto-generated catch block
-                Log.e("ssh", e.toString());
-            }
+
+
+                    //Log.e("ssh-AA", baos.toString());
+                } catch (JSchException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        
+
 
         return "testing";
     }
