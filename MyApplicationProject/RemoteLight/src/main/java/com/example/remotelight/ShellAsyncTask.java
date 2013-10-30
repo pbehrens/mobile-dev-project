@@ -2,9 +2,9 @@ package com.example.remotelight;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -40,7 +40,7 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
                 Properties properties = new Properties();
                 properties.put("StrictHostKeyChecking", "no");
                 session.setConfig(properties);
-                session.connect(30000);
+                session.connect(3000);
 
                 channel = session.openChannel("shell");
                 channel.setInputStream(bitArrayInputStream);
@@ -48,6 +48,17 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
                 channel.connect();
                 if(channel.isConnected()){
                     Log.e("ssh", "connected");
+                    ChannelExec channelssh = (ChannelExec)
+                            session.openChannel("exec");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    channelssh.setOutputStream(baos);
+
+                    // Execute command
+                    channelssh.setCommand("ls");
+                    channelssh.connect();
+                    channelssh.disconnect();
+
+                    Log.e("ssh-AA", baos.toString());
                 }
                 else{
                     Log.e("ssh", "not connected");
@@ -61,7 +72,7 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
     }
 
     protected void onProgressUpdate(Integer... progress) {
-//        Log.e("ssh", bitArrayOutputStream.toString());
+        //usr_nm.setText(asd);
 
     }
 
