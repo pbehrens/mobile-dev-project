@@ -1,6 +1,7 @@
 package com.example.remotelight;
 
 import android.os.AsyncTask;
+import android.text.Editable;
 import android.util.Log;
 
 import com.jcraft.jsch.Channel;
@@ -13,13 +14,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 
 /**
  * Created by thebeagle on 10/29/13.
  */
-public class ShellAsyncTask extends AsyncTask<String, String, String> {
+public class ShellAsyncTask extends AsyncTask<String , String, String> {
 
     private Exception exception;
     Session session;
@@ -27,14 +29,27 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
     ByteArrayInputStream bitArrayInputStream;
     Channel channel;
     JSch jsch;
+    static String command;
 
-    protected String doInBackground(String... urls) {
+
+    public static void setCommand(String comd){
+        command = comd;
+
+    }
+
+    protected String doInBackground(String... commands) {
         JSch jsch = new JSch();
-        String username = "wluw";
-        String password = "b3rcsdfg";
-        String host     = "wluw.org"; // sample ip address
+        String command = commands[0];
+        Log.e("ssh", commands[0]);
+//        String username = "wluw";
+//        String password = "b3rcsdfg";
+//        String host     = "wluw.org"; // sample ip address
+        String username = "pcduino";
+        String password = "honig08";
+        String host = "192.168.43.171";
         Log.e("ssh", "is this working");
         try {
+
                 session = jsch.getSession(username, host, 22);
                 session.setPassword(password);
 //                Toast.makeText(getApplicationContext(), "working....", Toast.LENGTH_LONG).show();
@@ -50,17 +65,9 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
                 channel.connect();
                 if(channel.isConnected()){
                     Log.e("ssh", "connected");
-//                    ChannelExec channelssh = (ChannelExec)
-//                            session.openChannel("exec");
-//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                    channelssh.setOutputStream(baos);
-//
-//                    // Execute command
-//                    channelssh.setCommand("ls");
-//                    channelssh.connect();
-//                    channelssh.disconnect();
+
                     Channel channel= session.openChannel("exec");
-                    ((ChannelExec)channel).setCommand("ls");
+                    ((ChannelExec)channel).setCommand(command);
 
 // X Forwarding
 // channel.setXForwarding(true);
@@ -68,15 +75,15 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
 //channel.setInputStream(System.in);
                     channel.setInputStream(null);
 
-//channel.setOutputStream(System.out);
-
-//FileOutputStream fos=new FileOutputStream("/tmp/stderr");
-//((ChannelExec)channel).setErrStream(fos);
                     ((ChannelExec)channel).setErrStream(System.err);
 
                     InputStream in=channel.getInputStream();
+                    OutputStream out=channel.getOutputStream();
 
                     channel.connect();
+
+                    out.write("ls".getBytes());
+                    out.flush();
 
                     byte[] tmp=new byte[1024];
                     while(true){
@@ -94,6 +101,8 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
                     }
                     channel.disconnect();
                     session.disconnect();
+                }else{
+                    Log.e("ssh", "Not Connected");
                 }
 
 
@@ -103,7 +112,7 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        
+
 
 
         return "testing";
@@ -111,11 +120,20 @@ public class ShellAsyncTask extends AsyncTask<String, String, String> {
 
     protected void onProgressUpdate(Integer... progress) {
         //usr_nm.setText(asd);
+        //cantar();
 
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
     }
 
     protected void onPostExecute(String feed) {
         // TODO: check this.exception
         // TODO: do something with the feed
+    }
+
+    public static void setCommand(Editable text) {
     }
 }

@@ -1,27 +1,22 @@
 package com.example.remotelight;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
-import android.speech.RecognizerIntent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity {
     EditText commandEditText;
@@ -45,7 +40,9 @@ public class MainActivity extends Activity {
         Log.e("ssh", "does it get before the async task");
 
     }
+    public void cantar(){
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +57,19 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                new ShellAsyncTask().execute("str", "str", "str");
+                AsyncTask<String, String, String> newOne;
+                //ShellAsyncTask.setCommand(commandEditText.getText().toString());
+                newOne = new ShellAsyncTask();
+                newOne.execute(commandEditText.getText().toString(), "str", "str");
+                try {
+                    String result = newOne.get();
+                    Log.e("ssh", result);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
 
 //                String username = "wluw";
 //                String password = "b3rcsdfg";
