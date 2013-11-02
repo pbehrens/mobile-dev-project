@@ -22,25 +22,27 @@ public class MainActivity extends Activity {
     EditText commandEditText;
     TextView resultTextView;
     Button sendCommandButton;
-    Session session;
-    ByteArrayOutputStream bitArrayOutputStream;
-    ByteArrayInputStream bitArrayInputStream;
-    Channel channel;
-    JSch jsch;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        commandEditText = (EditText) findViewById(R.id.commandEditText);
-        resultTextView  = (TextView) findViewById(R.id.terminalTextView);
-        sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
+        setViewVariables();
         setClickListeners();
+        initializeSessionController();
         Log.e("ssh", "does it get before the async task");
 
     }
-    public void cantar(){
+
+    public void setViewVariables(){
+        commandEditText = (EditText) findViewById(R.id.commandEditText);
+        resultTextView  = (TextView) findViewById(R.id.terminalTextView);
+        sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
+    }
+
+    public void initializeSessionController(){
+        SessionController sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
+        sessionController.initSession();
+        sessionController.runCommand("ps ax | tail");
 
     }
 
@@ -50,7 +52,6 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
     public void setClickListeners(){
         sendCommandButton.setOnClickListener(new View.OnClickListener() {
@@ -69,49 +70,9 @@ public class MainActivity extends Activity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-
-
-//                String username = "wluw";
-//                String password = "b3rcsdfg";
-//                String host     = "wluw.org"; // sample ip address
-//                if(commandEditText.getText().toString() != ""){
-//                    jsch = new JSch();
-//                    new ShellAsyncTask().execute();
-//
-//                    try {
-//                        session = jsch.getSession(username, host, 22);
-//                        session.setPassword(password);
-//                        Toast.makeText(getApplicationContext(), commandEditText.getText(), Toast.LENGTH_LONG).show();
-//
-//                        Properties properties = new Properties();
-//                        properties.put("StrictHostKeyChecking", "no");
-//                        session.setConfig(properties);
-//                        session.connect(30000);
-//
-//                        channel = session.openChannel("shell");
-//                        channel.setInputStream(bitArrayInputStream);
-//                        channel.setOutputStream(bitArrayOutputStream);
-//                        channel.connect();
-//
-//                    } catch (JSchException e) {
-//                        // TODO Auto-generated catch block
-//                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//                else{
-//                    Toast.makeText(getApplicationContext(), "Command cannot be empty !", Toast.LENGTH_LONG).show();
-//                }
             }
         });
     }
 
-    public void onCommandEditText(View v){
-
-    }
-
-    public void on_ResultTextView(View v){
-
-
-    }
     
 }
