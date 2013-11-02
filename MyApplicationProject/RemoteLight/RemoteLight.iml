@@ -72,6 +72,9 @@
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
     <orderEntry type="library" exported="" name="ComAndroidSupportAppcompatV71800.aar" level="project" />
     <orderEntry type="library" exported="" name="jsch-0.1.50" level="project" />
+    <orderEntry type="library" name="gson-2.2.4" level="project" />
+    <orderEntry type="library" name="gson-2.2.4-javadoc" level="project" />
+    <orderEntry type="library" name="gson-2.2.4-sources" level="project" />
   </component>
 </module>
 

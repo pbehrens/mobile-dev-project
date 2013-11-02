@@ -8,15 +8,13 @@ public class Command {
     private String command;
     private String type;
     private int requestTimeout;
-    private int killTimeout;
     private int pid;
 
-    public Command(String name, String command, String type){
+    public Command(String name, String command, String type, int timeoutMillis){
         this.name = name;
         this.command = command;
         this.type = type;
-        this.requestTimeout = 20;
-        this.killTimeout = -1;
+        this.requestTimeout = timeoutMillis;
     }
 
     public String getName() {
@@ -51,13 +49,6 @@ public class Command {
         this.requestTimeout = requestTimeout;
     }
 
-    public int getKillTimeout() {
-        return killTimeout;
-    }
-
-    public void setKillTimeout(int killTimeout) {
-        this.killTimeout = killTimeout;
-    }
 
     public int getPid() {
         return pid;

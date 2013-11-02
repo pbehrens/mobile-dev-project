@@ -58,6 +58,8 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+//                JSONConverter.createHashMapFromJson("blah");
+
                 AsyncTask<String, String, String> newOne;
                 //ShellAsyncTask.setCommand(commandEditText.getText().toString());
                 newOne = new ShellAsyncTask();

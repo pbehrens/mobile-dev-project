@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -32,6 +33,9 @@ public class SessionController {
     String password;
     String host;
     int timeout;
+    boolean initialized;
+
+    HashMap<String, Command> commandHashMap;
 
     public SessionController(String username, String password, String host){
         this.username = username;
@@ -39,6 +43,8 @@ public class SessionController {
         this.host = host;
         this.jsch = new JSch();
         this.timeout = 0;
+        this.initialized = false;
+        this.commandHashMap = new HashMap<String, Command>();
     }
 
     public boolean initSession(){
@@ -61,6 +67,7 @@ public class SessionController {
             channel.connect();
             if(channel.isConnected()){
                 Log.e("ssh", "connection failed");
+                initialized = true;
                 return true;
             }
         }
@@ -123,58 +130,15 @@ public class SessionController {
         return "";
     }
 
-    public int getLastPid() {
-        Log.e("ssh", "looking for the last pid");
-        String pid = "-1";
-        try{
-            Channel pidChannel = session.openChannel("exec");
-            ((ChannelExec)pidChannel).setCommand("echo $!");
-
-            pidChannel.setInputStream(null);
-
-            ((ChannelExec)pidChannel).setErrStream(System.err);
-
-            InputStream in=pidChannel.getInputStream();
-            OutputStream out=pidChannel.getOutputStream();
-
-            pidChannel.connect();
-
-            out.write("echo $!".getBytes());
-            out.flush();
-            String response = "";
-            byte[] tmp=new byte[1024];
-            while(true){
-                while(in.available()>0){
-                    int i=in.read(tmp, 0, 1024);
-                    if(i<0)break;
-
-                    String newChars = new String(tmp, 0, i);
-                    response += newChars;
-                    System.out.print(new String(tmp, 0, i));
-                    Log.e("ssh", new String(tmp, 0, i) + "is the most recent PID");
-                }
-                if(pidChannel.isClosed()){
-                    System.out.println("exit-status: "+pidChannel.getExitStatus());
-                    break;
-                }
-            }
-            Log.e("ssh", response);
-
-            pidChannel.disconnect();
-            Log.e("ssh", "some thing went on with the PID channel \n");
-
-            return 10;
-//            return Integer.parseInt(pid);
-        }catch (JSchException e1) {
-            e1.printStackTrace();
-            Log.e("ssh", "SSH it don't work \n" + e1.toString());
-
-            return -1;
-        } catch (IOException e1) {
-            Log.e("ssh", "I/O exception");
-            e1.printStackTrace();
-            return -1;
+    public String getCommandList(){
+        if(initialized == true){
+            String commandList = this.runCommand("echo ./commands.json");
+            return commandList;
         }
+        else{
+            return "";
+        }
+
     }
 
 }
