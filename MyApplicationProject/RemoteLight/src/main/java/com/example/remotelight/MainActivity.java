@@ -10,12 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity {
@@ -34,7 +28,7 @@ public class MainActivity extends Activity {
     }
 
     public void setViewVariables(){
-        commandEditText = (EditText) findViewById(R.id.commandEditText);
+        commandEditText = (EditText) findViewById(R.id.etIp);
         resultTextView  = (TextView) findViewById(R.id.terminalTextView);
         sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
     }
