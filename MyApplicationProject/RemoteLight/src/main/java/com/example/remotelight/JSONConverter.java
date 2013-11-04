@@ -5,7 +5,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 import com.example.remotelight.Command;
-import com.google.gson.*;
+import org.json.*;
 /**
  * Created by thebeagle on 11/2/13.
  */
@@ -16,7 +16,7 @@ public class JSONConverter {
     }
 
     public static HashMap<String, Command> createHashMapFromJson(String json){
-        Gson gson = new Gson(); // Or use new GsonBuilder().create();
+        HashMap<String, Command> commandList = new HashMap<String, Command>();
         String jsonLine = "{\n" +
                 "    \"commands\": [\n" +
                 "        {\n" +
@@ -24,45 +24,87 @@ public class JSONConverter {
                 "            \"type\": \"static\",\n" +
                 "            \"command\": \"ls\",\n" +
                 "            \"timeout\": \"3000\",\n" +
-                "            \"argument_type\": \"flags\"\n" +
+                "            \"arguments\": [\n" +
+                "                \"flags\",\n" +
+                "                \"directory\"\n" +
+                "            ]\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"name\": \"printWorkingDirectory\",\n" +
                 "            \"type\": \"static\",\n" +
                 "            \"command\": \"pwd\",\n" +
-                "            \"timeout\": \"3000\"\n" +
+                "            \"timeout\": \"3000\",\n" +
+                "            \"arguments\": [\n" +
+                "                \"flags\"\n" +
+                "            ]\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"name\": \"printProcesses\",\n" +
                 "            \"type\": \"static\",\n" +
                 "            \"command\": \"ps ax\",\n" +
-                "            \"timeout\": \"3000\"\n" +
+                "            \"timeout\": \"3000\",\n" +
+                "            \"arguments\": [\n" +
+                "                \"flags\"\n" +
+                "            ]\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"name\": \"grep\",\n" +
                 "            \"type\": \"piped\",\n" +
                 "            \"command\": \"grep\",\n" +
-                "            \"timeout\": \"3000\"\n" +
+                "            \"timeout\": \"3000\",\n" +
+                "            \"arguments\": [\n" +
+                "                \"flags\"\n" +
+                "            ]\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"name\": \"printText\",\n" +
                 "            \"type\": \"static\",\n" +
                 "            \"command\": \"echo\",\n" +
-                "            \"timeout\": \"3000\"\n" +
+                "            \"timeout\": \"3000\",\n" +
+                "            \"arguments\": [\n" +
+                "                \"flags\",\n" +
+                "                \"string\"\n" +
+                "            ]\n" +
                 "        },\n" +
                 "        {\n" +
                 "            \"name\": \"getLastPid\",\n" +
                 "            \"type\": \"static\",\n" +
                 "            \"command\": \"echo !$\",\n" +
-                "            \"timeout\": \"3000\"\n" +
+                "            \"timeout\": \"3000\",\n" +
+                "            \"arguments\": [\n" +
+                "                \n" +
+                "            ]\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";
 
-        Map jsonJavaRootObject;
-        jsonJavaRootObject = new Gson().fromJson(jsonLine, Map.class);
+        JSONObject jsonObj = null;
+        try {
+            jsonObj = new JSONObject(jsonLine);
+            Log.e("json", jsonObj.toString());
+            Log.e("json", "The length is " + String.valueOf(jsonObj.getJSONArray("commands").length()));
+            JSONArray jsonArray = jsonObj.getJSONArray("commands");
 
-        Log.e("json" ,jsonJavaRootObject.toString());
+            int len = jsonArray.length();
+            for(int i = 0; i < len; i++){
+                JSONObject command = jsonArray.getJSONObject(i);
+                String nameString = command.get("name").toString();
+                String commandString = command.get("command").toString();
+                String typeString = command.get("type").toString();
+                int timeout = Integer.valueOf(command.get("timeout").toString());
+                JSONArray arguments = command.getJSONArray("arguments");
+
+                Command aCommand = new Command(nameString, commandString, typeString, null, null, timeout);
+                commandList.put(nameString, aCommand);
+
+                Log.e("json", "command object is " + aCommand.toString() +  "\n");
+
+            }
+            return commandList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 //
 //        JsonElement jelement = new JsonParser().parse(jsonLine);
 //        JsonObject  jobject = jelement.getAsJsonObject();
@@ -80,7 +122,7 @@ public class JSONConverter {
 //    public String parse(String jsonLine) {
 //
 //    }
-        return (HashMap) jsonJavaRootObject;
+        return null;
     }
 
 }

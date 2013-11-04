@@ -7,14 +7,24 @@ public class Command {
     private String name;
     private String command;
     private String type;
+    private String directory;
+
     private int requestTimeout;
     private int pid;
+    private String flags;
 
-    public Command(String name, String command, String type, int timeoutMillis){
+    public Command(String name, String command, String type, String flags, String directory, int timeoutMillis){
         this.name = name;
         this.command = command;
         this.type = type;
+        this.directory = directory;
+        this.flags = flags;
+
         this.requestTimeout = timeoutMillis;
+    }
+
+    public String toString(){
+        return name + "\n" + command + "\n" + type + "\n" + requestTimeout;
     }
 
     public String getName() {
@@ -56,6 +66,22 @@ public class Command {
 
     public void setPid(int pid) {
         this.pid = pid;
+    }
+
+    public String getDirectory() {
+        return directory;
+    }
+
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+
+    public String getFlags() {
+        return flags;
+    }
+
+    public void setFlags(String flags) {
+        this.flags = flags;
     }
 
 

@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -58,20 +59,20 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-//                JSONConverter.createHashMapFromJson("blah");
+                JSONConverter.createHashMapFromJson("blah");
 
-                AsyncTask<String, String, String> newOne;
-                //ShellAsyncTask.setCommand(commandEditText.getText().toString());
-                newOne = new ShellAsyncTask();
-                newOne.execute(commandEditText.getText().toString(), "str", "str");
-                try {
-                    String result = newOne.get();
-                    Log.e("ssh", result);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
+//                AsyncTask<String, String, String> newOne;
+//                //ShellAsyncTask.setCommand(commandEditText.getText().toString());
+//                newOne = new ShellAsyncTask();
+//                newOne.execute(commandEditText.getText().toString(), "str", "str");
+//                try {
+//                    String result = newOne.get();
+//                    Log.e("ssh", result);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }
