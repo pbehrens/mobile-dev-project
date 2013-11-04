@@ -1,6 +1,7 @@
 package com.example.remotelight;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.concurrent.ExecutionException;
-
 public class MainActivity extends Activity {
-    EditText commandEditText;
+    EditText ip;
+    EditText user;
+    EditText password;
     TextView resultTextView;
     Button sendCommandButton;
+    SessionController sessionController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,15 +31,15 @@ public class MainActivity extends Activity {
     }
 
     public void setViewVariables(){
-        commandEditText = (EditText) findViewById(R.id.etIp);
+        ip = (EditText) findViewById(R.id.etIp);
         resultTextView  = (TextView) findViewById(R.id.terminalTextView);
         sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
     }
 
     public void initializeSessionController(){
-        SessionController sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
+        sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
         sessionController.initSession();
-        sessionController.runCommand("ps ax | tail");
+        //sessionController.runCommand("ps ax | tail");
 
     }
 
@@ -52,20 +55,39 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-//                JSONConverter.createHashMapFromJson("blah");
+//              //  JSONConverter.createHashMapFromJson("blah");
+                //Intent newIntent;
+                ip = (EditText) findViewById(R.id.etIp);
+                user = (EditText) findViewById(R.id.etUsername);
+                password = (EditText) findViewById(R.id.etPassword);
 
                 AsyncTask<String, String, String> newOne;
-                //ShellAsyncTask.setCommand(commandEditText.getText().toString());
+                Intent i;
+                i = new Intent(MainActivity.this, Commands.class);
+                //Session session = sessionController.getSession();
+
+
+
+                startActivity(i);
+                /*SessionController Session;
+                Session = new SessionController("mathilda", "foobar", "192.168.1.198");
+                Session.initSession();*/
+                //sessionController.runCommand("echo Ranulfo");
+                //sessionController.disconnect();
+                //sessionController.runCommand("touch worked21");
+
+                /*//ShellAsyncTask.setCommand(commandEditText.getText().toString());
                 newOne = new ShellAsyncTask();
                 newOne.execute(commandEditText.getText().toString(), "str", "str");
-                try {
-                    String result = newOne.get();
-                    Log.e("ssh", result);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
+
+                //Activity Commands = new Activity();
+                AsyncTask<String, String, String> secondOne;
+                secondOne = new ChannelThread();
+                secondOne.execute("touch ranulfofile11");
+                AsyncTask<String, String, String> secondtwo;
+                secondtwo = new ShellAsyncTask();
+                secondtwo.execute("touch ranulfofile21");*/
+                //
             }
         });
     }
