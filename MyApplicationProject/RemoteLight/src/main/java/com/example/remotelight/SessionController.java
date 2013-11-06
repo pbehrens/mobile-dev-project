@@ -1,8 +1,5 @@
 package com.example.remotelight;
 
-import com.jcraft.jsch.Session;
-import android.os.AsyncTask;
-import android.text.Editable;
 import android.util.Log;
 
 import com.jcraft.jsch.Channel;
@@ -17,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Properties;
 
 /**
  * Created by thebeagle on 11/2/13.
@@ -34,8 +30,11 @@ public class SessionController {
     String host;
     int timeout;
     boolean initialized;
+    SessionThread sessionThread;
 
     HashMap<String, Command> commandHashMap;
+
+
 
     public SessionController(String username, String password, String host){
         this.username = username;
@@ -47,9 +46,27 @@ public class SessionController {
         this.commandHashMap = new HashMap<String, Command>();
     }
 
-    public boolean initSession(){
+    public Session getSession(){
+        if(session.isConnected()){
+            return session;
+        }
+        return null;
+    }
+
+    public void initSession() {
         //attempt to start an ssh session and create a shell for further commands
-        try{
+        sessionThread = new SessionThread(username,password,host);
+        sessionThread.execute();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Log.e("ssh","thread");
+        }
+        session = sessionThread.getSession();
+        if(session == null)
+            Log.e("ssh","Here shit");
+        /*try{
             session = jsch.getSession(username, host, 22);
             session.setPassword(password);
 
@@ -77,13 +94,13 @@ public class SessionController {
         }
         Log.e("ssh", "connected and ready for exec channels");
 
-        return false;
+        return false;*/
     }
 
     public String runCommand(String command){
             try{
                 Channel channel= session.openChannel("exec");
-                ((ChannelExec)channel).setCommand(command + "&");
+                ((ChannelExec)channel).setCommand(command);
 
                 channel.setInputStream(null);
 
@@ -123,12 +140,17 @@ public class SessionController {
                 Log.e("ssh", "it don't work");
                 e1.printStackTrace();
             } catch (Exception e) {
-                Log.e("ssh", e.toString());
+                Log.e("ssh", e.toString()+"HERE");
                 e.printStackTrace();
 
             }
         return "";
     }
+
+    public void disconnect(){
+        sessionThread.disconnectSession();
+    }
+
 
     public String getCommandList(){
         if(initialized == true){

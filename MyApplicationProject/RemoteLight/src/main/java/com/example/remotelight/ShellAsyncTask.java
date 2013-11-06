@@ -5,17 +5,11 @@ import android.text.Editable;
 import android.util.Log;
 
 import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
 
 
 /**
@@ -39,10 +33,10 @@ public class ShellAsyncTask extends AsyncTask<String , String, String> {
 
     protected String doInBackground(String... commands) {
         SessionController sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
-        boolean isInitialized = sessionController.initSession();
+        boolean isInitialized = false;//sessionController.initSession();
         if(isInitialized){
             Log.e("ssh", "session was initialized");
-            sessionController.runCommand("ps ax | tail && echo '<+++++>' && echo $!");
+            sessionController.runCommand(commands[0]);
 //            sessionController.runCommand("echo $!");
         }
         else{
