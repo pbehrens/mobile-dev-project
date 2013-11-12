@@ -25,9 +25,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         setViewVariables();
         setClickListeners();
-        initializeSessionController();
+
         Log.e("ssh", "does it get before the async task");
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initializeSessionController();
     }
 
     public void setViewVariables(){
@@ -37,7 +43,8 @@ public class MainActivity extends Activity {
     }
 
     public void initializeSessionController(){
-        sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
+        sessionController = new SessionController("pcduino", "honig08", "192.168.43.171");
+        //sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
         sessionController.initSession();
         //sessionController.runCommand("ps ax | tail");
 
@@ -61,10 +68,13 @@ public class MainActivity extends Activity {
                 ip = (EditText) findViewById(R.id.etIp);
                 user = (EditText) findViewById(R.id.etUsername);
                 password = (EditText) findViewById(R.id.etPassword);
+                sessionController.runCommand("echo lindo");
 
                 AsyncTask<String, String, String> newOne;
                 Intent i;
+
                 i = new Intent(MainActivity.this, Commands.class);
+                i.putExtra("SessionController", sessionController);
                 //Session session = sessionController.getSession();
 
 

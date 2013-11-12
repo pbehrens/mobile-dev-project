@@ -73,7 +73,7 @@ public class SessionThread extends AsyncTask<String , Session, String> {
 
         //open the shell and set the I/O for i
         if(session.isConnected()){
-            Log.e("ssh", "connection failed");
+            Log.e("ssh", "connection success");
             initialized = true;
             publishProgress(session);
             //return true;
@@ -88,7 +88,7 @@ public class SessionThread extends AsyncTask<String , Session, String> {
         e1.printStackTrace();
         //return false;
     }
-    Log.e("ssh", "connected and ready for exec channels");
+    Log.e("ssh", "session disconnected");
     session.disconnect();
     //return false;
     return null;

@@ -13,12 +13,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by thebeagle on 11/2/13.
  */
-public class SessionController {
+public class SessionController implements Serializable{
     private Exception exception;
     Session session;
     ByteArrayOutputStream bitArrayOutputStream;
@@ -162,6 +163,7 @@ public class SessionController {
         }
 
     }
+
 
 }
 
