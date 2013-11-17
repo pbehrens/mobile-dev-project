@@ -2,6 +2,7 @@ package com.example.remotelight;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,8 @@ public class Commands extends Activity {
     Button back;
     Button select;
     SessionController sessionOpen;
+    Drawable Bulp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
