@@ -11,10 +11,10 @@ import com.jcraft.jsch.Session;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-
 /**
  * Created by thebeagle on 10/29/13.
  */
+
 public class ShellAsyncTask extends AsyncTask<String , String, String> {
 
     private Exception exception;
@@ -42,8 +42,6 @@ public class ShellAsyncTask extends AsyncTask<String , String, String> {
         else{
             Log.e("ssh", "session wasn't initialized");
         }
-
-
         return "testing";
     }
 

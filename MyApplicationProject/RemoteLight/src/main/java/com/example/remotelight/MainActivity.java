@@ -1,15 +1,22 @@
 package com.example.remotelight;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
     EditText ip;
@@ -18,6 +25,13 @@ public class MainActivity extends Activity {
     TextView resultTextView;
     Button sendCommandButton;
     SessionController sessionController;
+    BroadcastReceiver sshBroadcastReceiver;
+
+
+
+
+    boolean isBound;
+    private SSHService sshService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +39,66 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         setViewVariables();
         setClickListeners();
-
+        initReceiver();
+        sshBroadcastReceiver = new SSHReceiver();
         Log.e("ssh", "does it get before the async task");
+        doBindService();
+    }
 
+
+    public void initReceiver(){
+        sshBroadcastReceiver = new BroadcastReceiver() {
+            private static final String COMMMAND_STATIC = "com.example.remotelight.COMMAND_STATIC";
+            private static final String COMMMAND_DYNAMIC = "com.example.remotelight.COMMAND_DYNAMIC";
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.e("ssh", "recevived a broadcast");
+                //look for what command was returned by the service and handle the right way
+                try {
+                    if (intent.getAction().equals(COMMMAND_STATIC)) {
+                        Log.e("ssh", "static command");
+
+                    }
+
+                    if (intent.getAction().equals(COMMMAND_DYNAMIC)) {
+                        Log.e("ssh", "dynamic command");
+                    }
+                } catch (NullPointerException npe) {
+                    // Don't care
+                }
+            }
+        };
+        //TODO: make a list in the manifest instead of dynamically creating the actions
+        IntentFilter filter = new IntentFilter("com.toxy.LOAD_URL");
+        filter.addAction("com.example.remotelight.COMMAND_STATIC");
+        filter.addAction("com.example.remotelight.COMMAND_STATIC");
+        registerReceiver(sshBroadcastReceiver, filter);
+    }
+
+    void doBindService() {
+        // Establish a connection with the service.  We use an explicit
+        // class name because we want a specific service implementation that
+        // we know will be running in our own process (and thus won't be
+        // supporting component replacement by other applications).
+        bindService(new Intent(MainActivity.this,
+                SSHService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        isBound = true;
+        Log.e("ssh", "bound service");
+    }
+
+    private void doUnbindService() {
+        if (isBound) {
+            // Detach our existing connection.
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        doUnbindService();
     }
 
     @Override
@@ -47,7 +118,6 @@ public class MainActivity extends Activity {
         //sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
         sessionController.initSession();
         //sessionController.runCommand("ps ax | tail");
-
     }
 
 
@@ -63,23 +133,29 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-
-                //Intent newIntent;
-                ip = (EditText) findViewById(R.id.etIp);
-                user = (EditText) findViewById(R.id.etUsername);
-                password = (EditText) findViewById(R.id.etPassword);
-                sessionController.runCommand("echo lindo");
-
-                AsyncTask<String, String, String> newOne;
-                Intent i;
-
-                i = new Intent(MainActivity.this, Commands.class);
-                i.putExtra("SessionController", sessionController);
-                //Session session = sessionController.getSession();
+                if(isBound){
+                    sshService.sendCommand("will this work");
+                }
 
 
 
-                startActivity(i);
+//
+//                //Intent newIntent;
+//                ip = (EditText) findViewById(R.id.etIp);
+//                user = (EditText) findViewById(R.id.etUsername);
+//                password = (EditText) findViewById(R.id.etPassword);
+//                sessionController.runCommand("echo lindo");
+//
+//                AsyncTask<String, String, String> newOne;
+//                Intent i;
+//
+//                i = new Intent(MainActivity.this, Commands.class);
+//                i.putExtra("SessionController", sessionController);
+//                //Session session = sessionController.getSession();
+//
+//
+//
+//                startActivity(i);
                 /*SessionController Session;
                 Session = new SessionController("mathilda", "foobar", "192.168.1.198");
                 Session.initSession();*/
@@ -103,5 +179,28 @@ public class MainActivity extends Activity {
         });
     }
 
-    
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the service object we can use to
+            // interact with the service.  Because we have bound to a explicit
+            // service that we know is running in our own process, we can
+            // cast its IBinder to a concrete class and directly access it.
+            sshService = ((SSHService.LocalBinder)service).getServerInstance();
+
+            Log.e("ssh", "service connected?");
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            // Because it is running in our same process, we should never
+            // see this happen.
+            sshService = null;
+            Log.e("ssh", "service unconnected?");
+
+        }
+    };
+
 }
