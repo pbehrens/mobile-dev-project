@@ -66,9 +66,28 @@ public class SSHService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onStart(final Intent intent, final int startId) {
+        Thread t = new Thread("MyService(" + startId + ")") {
+            @Override
+            public void run() {
+                _onStart(intent, startId);
+                stopSelf();
+            }
+        };
+        t.start();
+    }
 
-        if(sessionIsValid()){
+    private void _onStart(final Intent intent, final int startId) {
+        //Your Start-Code for the service
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        username = intent.getStringExtra("username");
+        password = intent.getStringExtra("password");
+        host = intent.getStringExtra("host");
+
+        if(true){
             Log.i("ssh", "Received start id " + startId + ": " + intent);
             Log.e("ssh", "started szervice");
             //
@@ -89,15 +108,16 @@ public class SSHService extends Service {
                     Log.e("ssh", "connection success");
                     initialized = true;
                     //return true;
-                    while(kill == false || sessionConnected){
+                    while(kill == true || sessionConnected){
                         //Loop
 
                     }
                 }
             }
             catch (JSchException e1) {
+                Log.e("ssh", e1.toString());
 
-                e1.printStackTrace();
+
                 //return false;
             }
             Log.e("ssh", "session disconnected");
@@ -118,7 +138,7 @@ public class SSHService extends Service {
 
 
     public boolean sessionIsValid(){
-        if(sessionController != null && sessionController.checkHostUserPassword()){
+        if(username != null && password != null && host != null){
             return true;
         }
         return false;
@@ -154,7 +174,7 @@ public class SSHService extends Service {
                 Log.e("ssh", "connection success");
                 initialized = true;
                 //return true;
-                while(kill == false || true){
+                while(kill == false){
                     //Loop
 
                 }
@@ -170,26 +190,9 @@ public class SSHService extends Service {
 
     }
 
-    public void sendCommand(String command){
-        Log.e("ssh", command);
-        if(sessionIsValid()){
-            String result = sessionController.runCommand(command);
-        }
-        else{
-
-        }
-
-        Intent intent = new Intent();
-        intent.setAction(COMMMAND_STATIC);
-        sendBroadcast(intent);
-    }
-
-
-
     public void sendConnectionStateBroadcast(){
         Intent intent = new Intent();
-
-        if(sessionController.isUp()){
+        if(sessionConnected){
             intent.setAction(SESSION_IS_UP);
         }
         else{

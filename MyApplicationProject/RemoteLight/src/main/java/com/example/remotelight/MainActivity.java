@@ -18,9 +18,9 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
     //TODO: fix all the permissions for the variables
-    EditText ip;
-    EditText user;
-    EditText password;
+    EditText etIp;
+    EditText etUsername;
+    EditText etPassword;
     TextView resultTextView;
     Button sendCommandButton;
     SessionController sessionController;
@@ -31,9 +31,22 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(android.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         setViewVariables();
         setClickListeners();
+
+
+
+        new Thread(new Runnable() {
+            public void run() {
+                Intent serviceStartIntent = new Intent(this, SSHService.class);
+                serviceStartIntent.putExtra("username", etUsername.getText().toString());
+                serviceStartIntent.putExtra("password", etPassword.getText().toString());
+                serviceStartIntent.putExtra("host", etIp.getText().toString());
+                startService(serviceStartIntent);
+            }
+        }).start();
+
         initReceiver();
         sshBroadcastReceiver = new SSHReceiver();
         Log.e("ssh", "does it get before the async task");
@@ -103,9 +116,18 @@ public class MainActivity extends Activity {
     }
 
     public void setViewVariables(){
-        ip = (EditText) findViewById(android.R.id.etIp);
-        resultTextView  = (TextView) findViewById(android.R.id.terminalTextView);
-        sendCommandButton = (Button) findViewById(android.R.id.sendCommandButton);
+        etIp = (EditText) findViewById(R.id.etIp);
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        resultTextView  = (TextView) findViewById(R.id.terminalTextView);
+        sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
+
+
+        etIp.setText("192.168.1.106");
+        etUsername.setText("pi");
+        etPassword.setText("foobar");
+
+
     }
 
     public void initializeSessionController(){
@@ -119,7 +141,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(android.R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -131,12 +153,12 @@ public class MainActivity extends Activity {
 
 
                 //Intent newIntent;
-                ip = (EditText) findViewById(android.R.id.etIp);
-                user = (EditText) findViewById(android.R.id.etUsername);
-                password = (EditText) findViewById(android.R.id.etPassword);
+                etIp = (EditText) findViewById(R.id.etIp);
+                etUsername = (EditText) findViewById(R.id.etUsername);
+                etPassword = (EditText) findViewById(R.id.etPassword);
 
                 if(isBound){
-                    sshService.setSessionData(user.getText().toString(), password.getText().toString(), ip.getText().toString());
+                    sshService.setSessionData(etUsername.getText().toString(), etPassword.getText().toString(), etIp.getText().toString());
                     sshService.runCommand("will this work");
                 }
 

@@ -3,9 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@android:style/Theme.Holo"
-    android:background="@drawable/abc_ab_stacked_solid_dark_holo"
-    >
+    style="@android:style/Theme.Holo">
+    <!--android:background="@drawable/abc_ab_stacked_solid_dark_holo"-->
+
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -38,8 +38,9 @@
         android:id="@+id/imageButton"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="1dp"
-        android:background="@drawable/abc_ab_stacked_solid_dark_holo"
         android:src="@drawable/bulboff" />
+
+    <!--android:background="@drawable/abc_ab_stacked_solid_dark_holo"-->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -52,8 +53,9 @@
             android:layout_width="158dp"
             android:layout_height="fill_parent"
             android:id="@+id/imageView"
-            android:src="@drawable/Thermometer"
             android:layout_gravity="center"/>
+
+        <!--android:src="@drawable/thermometer"-->
 
         <TextView
             android:layout_width="wrap_content"
