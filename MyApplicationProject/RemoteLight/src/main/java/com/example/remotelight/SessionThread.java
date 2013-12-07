@@ -1,5 +1,6 @@
 package com.example.remotelight;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -40,12 +41,8 @@ public class SessionThread extends AsyncTask<String , Session, String> {
         this.username = username;
         this.password = password;
         this.host = host;
-        this.jsch = new JSch();
-        this.timeout = 0;
-        this.initialized = false;
-        this.commandHashMap = new HashMap<String, Command>();
-
     }
+
     public Session getSession(){
         return session;
     }
@@ -56,41 +53,14 @@ public class SessionThread extends AsyncTask<String , Session, String> {
         super.onProgressUpdate(values);
 
 
+
     }
 
     @Override
     protected String doInBackground(String... params) {
-    try{
-        session = jsch.getSession(username, host, 22);
-        session.setPassword(password);
 
-        // set some vanilla properties for the connection
-        //TODO: more customized ssh connection properties
-        Properties properties = new Properties();
-        properties.put("StrictHostKeyChecking", "no");
-        session.setConfig(properties);
-        session.connect(timeout);
-
-        //open the shell and set the I/O for i
-        if(session.isConnected()){
-            Log.e("ssh", "connection success");
-            initialized = true;
-            publishProgress(session);
-            //return true;
-            while(kill == false || true){
-                //Loop
-
-            }
-        }
+        return "fopo";
     }
-    catch (JSchException e1) {
 
-        e1.printStackTrace();
-        //return false;
-    }
-    Log.e("ssh", "session disconnected");
-    session.disconnect();
-    //return false;
-    return null;
-    }
+
 }

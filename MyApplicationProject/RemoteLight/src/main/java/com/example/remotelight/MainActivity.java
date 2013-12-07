@@ -1,6 +1,7 @@
 package com.example.remotelight;
 
 import android.app.Activity;
+import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,16 +37,12 @@ public class MainActivity extends Activity {
         setClickListeners();
 
 
-
-        new Thread(new Runnable() {
-            public void run() {
-                Intent serviceStartIntent = new Intent(this, SSHService.class);
-                serviceStartIntent.putExtra("username", etUsername.getText().toString());
-                serviceStartIntent.putExtra("password", etPassword.getText().toString());
-                serviceStartIntent.putExtra("host", etIp.getText().toString());
-                startService(serviceStartIntent);
-            }
-        }).start();
+        IntentService service = new SSHService();
+        Intent serviceStartIntent = new Intent(this, SSHService.class);
+        serviceStartIntent.putExtra("username", etUsername.getText().toString());
+        serviceStartIntent.putExtra("password", etPassword.getText().toString());
+        serviceStartIntent.putExtra("host", etIp.getText().toString());
+        startService(serviceStartIntent);
 
         initReceiver();
         sshBroadcastReceiver = new SSHReceiver();

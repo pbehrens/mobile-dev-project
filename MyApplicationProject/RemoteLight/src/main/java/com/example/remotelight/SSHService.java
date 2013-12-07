@@ -28,7 +28,7 @@ import java.util.Properties;
  * Created by thebeagle on 11/16/13.
  */
 
-public class SSHService extends Service {
+public class SSHService extends IntentService {
 
     private static final String ACTION = "com.example.remotelight.COMMAND_SENT";
     LocalBinder serviceBinder = new LocalBinder();
@@ -50,9 +50,11 @@ public class SSHService extends Service {
     private boolean kill;
     private boolean sessionConnected;
     Session session;
+    public String name;
 
-    @Override
-    public void onCreate (){
+    public SSHService() {
+        super("SSHService");
+        this.name = name;
         sessionController = null;
         this.username = null;
         this.password = null;
@@ -63,32 +65,95 @@ public class SSHService extends Service {
         this.commandHashMap = new HashMap<String, Command>();
         this.kill = false;
         this.sessionConnected = true;
+
     }
 
     @Override
-    public void onStart(final Intent intent, final int startId) {
-        Thread t = new Thread("MyService(" + startId + ")") {
-            @Override
-            public void run() {
-                _onStart(intent, startId);
-                stopSelf();
-            }
-        };
-        t.start();
+    public void onCreate (){
+
     }
 
-    private void _onStart(final Intent intent, final int startId) {
-        //Your Start-Code for the service
-    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        username = intent.getStringExtra("username");
-        password = intent.getStringExtra("password");
-        host = intent.getStringExtra("host");
+        this.username = intent.getStringExtra("username");
+        this.password = intent.getStringExtra("password");
+        this.host = intent.getStringExtra("host");
+//        username = intent.getStringExtra("username");
+//        password = intent.getStringExtra("password");
+//        host = intent.getStringExtra("host");
+
+//        if(true){
+//            Log.i("ssh", "Received start id " + startId + ": " + intent);
+//            Log.e("ssh", "started szervice");
+//            //
+//            try{
+//                session = jsch.getSession(username, host, 22);
+//                session.setPassword(password);
+//
+//                // set some vanilla properties for the connection
+//                //TODO: more customized ssh connection properties
+//                Properties properties = new Properties();
+//                properties.put("StrictHostKeyChecking", "no");
+//                session.setConfig(properties);
+//                session.connect(timeout);
+//
+//                //open the shell and set the I/O for i
+//                if(session.isConnected()){
+//                    sessionConnected = false;
+//                    Log.e("ssh", "connection success");
+//                    initialized = true;
+//                    //return true;
+//                    while(kill == true || sessionConnected){
+//                        //Loop
+//
+//                    }
+//                }
+//            }
+//            catch (JSchException e1) {
+//                Log.e("ssh", e1.toString());
+//
+//
+//                //return false;
+//            }
+//            Log.e("ssh", "session disconnected");
+//            session.disconnect();
+//            //return false;
+//
+//            return Service.START_STICKY;
+//        }
+
+        return -1;
+    }
+
+    public void setSessionData(String username, String password, String host){
+        this.username = username;
+        this.password = password;
+        this.host = host;
+    }
+
+
+    public boolean sessionIsValid(){
+        if(username != null && password != null && host != null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+
+        return serviceBinder;
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        this.username = intent.getStringExtra("username");
+        this.password = intent.getStringExtra("password");
+        this.host = intent.getStringExtra("host");
 
         if(true){
-            Log.i("ssh", "Received start id " + startId + ": " + intent);
             Log.e("ssh", "started szervice");
             //
             try{
@@ -124,30 +189,7 @@ public class SSHService extends Service {
             session.disconnect();
             //return false;
 
-            return Service.START_STICKY;
         }
-
-        return -1;
-    }
-
-    public void setSessionData(String username, String password, String host){
-        this.username = username;
-        this.password = password;
-        this.host = host;
-    }
-
-
-    public boolean sessionIsValid(){
-        if(username != null && password != null && host != null){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-
-        return serviceBinder;
     }
 
 
