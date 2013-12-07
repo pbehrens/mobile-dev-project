@@ -4,17 +4,19 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@android:style/Theme.Holo"
+    android:background="@drawable/abc_ab_stacked_solid_dark_holo"
     >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="46dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
+            android:text="Disconect"
 
             android:id="@+id/button"
             android:layout_gravity="center_horizontal|top|right"
@@ -23,14 +25,44 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:text="Select"
+            android:text="Refresh"
             android:id="@+id/button2"
             android:layout_weight="0.53" />
 
 
     </LinearLayout>
 
+    <ImageButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/abc_ab_stacked_solid_dark_holo"
+        android:src="@drawable/bulboff" />
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:layout_width="158dp"
+            android:layout_height="fill_parent"
+            android:id="@+id/imageView"
+            android:src="@drawable/Thermometer"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Loading..."
+            android:id="@+id/textView"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
 
 </LinearLayout>
