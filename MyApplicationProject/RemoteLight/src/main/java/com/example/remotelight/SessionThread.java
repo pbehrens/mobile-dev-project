@@ -77,7 +77,7 @@ public class SessionThread extends AsyncTask<String , Session, String> {
             initialized = true;
             publishProgress(session);
             //return true;
-            while(kill == false){
+            while(kill == false || true){
                 //Loop
 
             }

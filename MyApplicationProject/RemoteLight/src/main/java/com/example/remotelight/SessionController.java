@@ -47,6 +47,23 @@ public class SessionController implements Serializable{
         this.commandHashMap = new HashMap<String, Command>();
     }
 
+    public SessionController(){
+        this.username = null;
+        this.password = null;
+        this.host = null;
+        this.jsch = new JSch();
+        this.timeout = 0;
+        this.initialized = false;
+        this.commandHashMap = new HashMap<String, Command>();
+    }
+
+    public boolean checkHostUserPassword(){
+        if(username == null || password == null || host == null){
+            return false;
+        }
+        return true;
+    }
+
     public Session getSession(){
         if(session.isConnected()){
             return session;
@@ -56,15 +73,14 @@ public class SessionController implements Serializable{
 
     public void initSession() {
         //attempt to start an ssh session and create a shell for further commands
-        sessionThread = new SessionThread(username,password,host);
-        sessionThread.execute();
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
             Log.e("ssh","thread");
         }
-        session = sessionThread.getSession();
+
         if(session == null)
             Log.e("ssh","Here shit");
         /*try{
@@ -152,6 +168,9 @@ public class SessionController implements Serializable{
         sessionThread.disconnectSession();
     }
 
+    public boolean isUp(){
+        return session.isConnected();
+    }
 
     public String getCommandList(){
         if(initialized == true){

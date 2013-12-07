@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@android:style/Theme.Holo"
-    android:background="@drawable/abc_ab_stacked_solid_dark_holo">
+    >
 
     <LinearLayout
         android:layout_width="fill_parent"

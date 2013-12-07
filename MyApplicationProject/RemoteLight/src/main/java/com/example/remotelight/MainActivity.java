@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+    //TODO: fix all the permissions for the variables
     EditText ip;
     EditText user;
     EditText password;
@@ -26,12 +27,8 @@ public class MainActivity extends Activity {
     Button sendCommandButton;
     SessionController sessionController;
     BroadcastReceiver sshBroadcastReceiver;
-
-
-
-
-    boolean isBound;
     private SSHService sshService;
+    boolean isBound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,17 +130,20 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+
+
+                //Intent newIntent;
+                ip = (EditText) findViewById(R.id.etIp);
+                user = (EditText) findViewById(R.id.etUsername);
+                password = (EditText) findViewById(R.id.etPassword);
+
                 if(isBound){
+                    sshService.setSessionData(user.getText().toString(), password.getText().toString(), ip.getText().toString());
                     sshService.sendCommand("will this work");
                 }
 
 
 
-//
-//                //Intent newIntent;
-//                ip = (EditText) findViewById(R.id.etIp);
-//                user = (EditText) findViewById(R.id.etUsername);
-//                password = (EditText) findViewById(R.id.etPassword);
 //                sessionController.runCommand("echo lindo");
 //
 //                AsyncTask<String, String, String> newOne;
