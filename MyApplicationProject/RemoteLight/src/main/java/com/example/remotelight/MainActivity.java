@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
     //TODO: fix all the permissions for the variables
@@ -33,7 +31,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(android.R.layout.activity_main);
         setViewVariables();
         setClickListeners();
         initReceiver();
@@ -105,9 +103,9 @@ public class MainActivity extends Activity {
     }
 
     public void setViewVariables(){
-        ip = (EditText) findViewById(R.id.etIp);
-        resultTextView  = (TextView) findViewById(R.id.terminalTextView);
-        sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
+        ip = (EditText) findViewById(android.R.id.etIp);
+        resultTextView  = (TextView) findViewById(android.R.id.terminalTextView);
+        sendCommandButton = (Button) findViewById(android.R.id.sendCommandButton);
     }
 
     public void initializeSessionController(){
@@ -121,7 +119,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(android.R.menu.main, menu);
         return true;
     }
 
@@ -133,9 +131,9 @@ public class MainActivity extends Activity {
 
 
                 //Intent newIntent;
-                ip = (EditText) findViewById(R.id.etIp);
-                user = (EditText) findViewById(R.id.etUsername);
-                password = (EditText) findViewById(R.id.etPassword);
+                ip = (EditText) findViewById(android.R.id.etIp);
+                user = (EditText) findViewById(android.R.id.etUsername);
+                password = (EditText) findViewById(android.R.id.etPassword);
 
                 if(isBound){
                     sshService.setSessionData(user.getText().toString(), password.getText().toString(), ip.getText().toString());
