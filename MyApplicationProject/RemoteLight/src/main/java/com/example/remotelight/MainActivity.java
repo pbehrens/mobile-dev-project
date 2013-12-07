@@ -182,13 +182,9 @@ public class MainActivity extends Activity {
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the service object we can use to
-            // interact with the service.  Because we have bound to a explicit
-            // service that we know is running in our own process, we can
-            // cast its IBinder to a concrete class and directly access it.
-            sshService = ((SSHService.LocalBinder)service).getServerInstance();
+            // This is called when the connection with the service has been established
 
+            sshService = ((SSHService.LocalBinder)service).getServerInstance();
             Log.e("ssh", "service connected?");
         }
 

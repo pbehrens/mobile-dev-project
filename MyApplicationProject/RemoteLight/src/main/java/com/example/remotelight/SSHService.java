@@ -184,12 +184,7 @@ public class SSHService extends Service {
         sendBroadcast(intent);
     }
 
-    public boolean checkConnectionLive(){
-        if(sessionController.isUp()){
-            return true;
-        }
-        return false;
-    }
+
 
     public void sendConnectionStateBroadcast(){
         Intent intent = new Intent();
