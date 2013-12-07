@@ -139,7 +139,7 @@ public class MainActivity extends Activity {
 
                 if(isBound){
                     sshService.setSessionData(user.getText().toString(), password.getText().toString(), ip.getText().toString());
-                    sshService.sendCommand("will this work");
+                    sshService.runCommand("will this work");
                 }
 
 

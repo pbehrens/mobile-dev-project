@@ -137,6 +137,39 @@ public class SSHService extends Service {
         }
     }
 
+    public boolean connectSession(){
+        try{
+            session = jsch.getSession(username, host, 22);
+            session.setPassword(password);
+
+            // set some vanilla properties for the connection
+            //TODO: more customized ssh connection properties
+            Properties properties = new Properties();
+            properties.put("StrictHostKeyChecking", "no");
+            session.setConfig(properties);
+            session.connect(timeout);
+
+            //open the shell and set the I/O for i
+            if(session.isConnected()){
+                Log.e("ssh", "connection success");
+                initialized = true;
+                //return true;
+                while(kill == false || true){
+                    //Loop
+
+                }
+            }
+            return true;
+        }
+        catch (JSchException e1) {
+
+            e1.printStackTrace();
+            //return false;
+        }
+        return false;
+
+    }
+
     public void sendCommand(String command){
         Log.e("ssh", command);
         if(sessionIsValid()){
@@ -191,6 +224,9 @@ public class SSHService extends Service {
 
 
     public String runCommand(String command){
+        if(!sessionConnected){
+            connectSession();
+        }
         try{
             Channel channel= session.openChannel("exec");
             ((ChannelExec)channel).setCommand(command);
@@ -233,6 +269,7 @@ public class SSHService extends Service {
             Log.e("ssh", "it don't work");
             e1.printStackTrace();
         } catch (Exception e) {
+    //      not connected to session
             Log.e("ssh", e.toString()+"HERE");
             e.printStackTrace();
         }
