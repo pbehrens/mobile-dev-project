@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
     BroadcastReceiver sshBroadcastReceiver;
     private SSHService sshService;
     boolean isBound;
+    SessionThread sessionThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +38,13 @@ public class MainActivity extends Activity {
         setClickListeners();
 
 
-        IntentService service = new SSHService();
         Intent serviceStartIntent = new Intent(this, SSHService.class);
         serviceStartIntent.putExtra("username", etUsername.getText().toString());
         serviceStartIntent.putExtra("password", etPassword.getText().toString());
         serviceStartIntent.putExtra("host", etIp.getText().toString());
         startService(serviceStartIntent);
+
+        sessionThread = (SessionThread) new SessionThread("pi", "foobar", "192.168.1.106" ).execute();
 
         initReceiver();
         sshBroadcastReceiver = new SSHReceiver();
@@ -109,7 +111,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        initializeSessionController();
+//        initializeSessionController();
     }
 
     public void setViewVariables(){
@@ -123,8 +125,6 @@ public class MainActivity extends Activity {
         etIp.setText("192.168.1.106");
         etUsername.setText("pi");
         etPassword.setText("foobar");
-
-
     }
 
     public void initializeSessionController(){
@@ -155,7 +155,12 @@ public class MainActivity extends Activity {
                 etPassword = (EditText) findViewById(R.id.etPassword);
 
                 if(isBound){
+                    Log.e("ssh", "get here 5");
                     sshService.setSessionData(etUsername.getText().toString(), etPassword.getText().toString(), etIp.getText().toString());
+                    sshService.setSessionThread(sessionThread);
+
+                    Log.e("ssh", "get here 6");
+
                     sshService.runCommand("will this work");
                 }
 

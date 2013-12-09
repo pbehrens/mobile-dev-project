@@ -41,11 +41,17 @@ public class SessionThread extends AsyncTask<String , Session, String> {
         this.username = username;
         this.password = password;
         this.host = host;
+        this.session = null;
     }
 
     public Session getSession(){
+        if(session == null){
+            return null;
+        }
         return session;
     }
+
+
 
 
     @Override
@@ -57,9 +63,43 @@ public class SessionThread extends AsyncTask<String , Session, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(String... strings) {
+        try{
 
-        return "fopo";
+            Log.e("ssh", "get here 12 " + strings[0]);
+//            Log.e("ssh", "" + params[0] + params[1] + params[2]);
+            session = jsch.getSession(username, host, 22);
+
+            session.setPassword(password);
+
+            // set some vanilla properties for the connection
+            //TODO: more customized ssh connection properties
+            Properties properties = new Properties();
+            properties.put("StrictHostKeyChecking", "no");
+            session.setConfig(properties);
+            session.connect(timeout);
+
+            //open the shell and set the I/O for i
+            if(session.isConnected()){
+                Log.e("ssh", "connection success");
+                initialized = true;
+                //proceed = true;
+                //return true;
+                while(kill == false){
+                    //Loop
+                    Log.e("ssh", "get here ");
+
+                }
+            }
+            return "complete";
+        }
+        catch (JSchException e) {
+            Log.e("ssh", "expection"+e.toString());
+
+            e.printStackTrace();
+            //return false;
+        }
+        return "complete";
     }
 
 

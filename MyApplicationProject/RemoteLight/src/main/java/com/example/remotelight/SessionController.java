@@ -71,47 +71,23 @@ public class SessionController implements Serializable{
         return null;
     }
 
+    public void setSessionThread(SessionThread sessionThread){
+        this.sessionThread = sessionThread;
+    }
+
     public void initSession() {
         //attempt to start an ssh session and create a shell for further commands
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Log.e("ssh","thread");
+        while(sessionThread.getSession() == null){
+            try{Thread.sleep(1000); Log.e("ssh", "waiting");}catch(Exception ee){}
+        }
+        if(session.isConnected()){
+            initialized = true;
+        }
+        else{
+            initialized = false;
         }
 
-        if(session == null)
-            Log.e("ssh","Here shit");
-        /*try{
-            session = jsch.getSession(username, host, 22);
-            session.setPassword(password);
-
-            // set some vanilla properties for the connection
-            //TODO: more customized ssh connection properties
-            Properties properties = new Properties();
-            properties.put("StrictHostKeyChecking", "no");
-            session.setConfig(properties);
-            session.connect(timeout);
-
-            //open the shell and set the I/O for it
-            channel = session.openChannel("shell");
-            channel.setInputStream(bitArrayInputStream);
-            channel.setOutputStream(bitArrayOutputStream);
-            channel.connect();
-            if(channel.isConnected()){
-                Log.e("ssh", "connection failed");
-                initialized = true;
-                return true;
-            }
-        }
-        catch (JSchException e1) {
-            e1.printStackTrace();
-            return false;
-        }
-        Log.e("ssh", "connected and ready for exec channels");
-
-        return false;*/
     }
 
     public String runCommand(String command){
