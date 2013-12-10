@@ -23,6 +23,8 @@ public class Commands extends Activity {
     int bulbOff;
     int bulbOn;
     TextView temperature;
+    public boolean init;
+
 
 
     @Override
@@ -63,6 +65,12 @@ public class Commands extends Activity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sessionController.disconnect();
+    }
+
     public void updateTemperature(String temp){
         temperature.setText(temp);
 
@@ -83,7 +91,17 @@ public class Commands extends Activity {
             @Override
             public void onClick(View v) {
                 if(sessionController.isInitialized()){
-                    sessionController.runCommand("python testLight.py");
+                    String[] result;
+                    result = sessionController.runCommand("python testLight.py").split("/");
+                    temperature.setText("Temp ="+result[1]+"C");
+                    if(result[0].equals("On")){
+                        bulb.setImageResource(bulbOn);
+                    }
+                    else{
+                        bulb.setImageResource(bulbOff);
+                    }
+
+
                 //Intent i;
                 //i = new Intent(Commands.this, RunningCommand.class);
                 //startActivity(i);
