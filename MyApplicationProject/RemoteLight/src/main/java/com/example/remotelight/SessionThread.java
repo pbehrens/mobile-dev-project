@@ -1,23 +1,28 @@
 package com.example.remotelight;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
 /**
  * Created by Ranulfo on 11/3/13.
  */
-public class SessionThread extends AsyncTask<String , Session, String> {
+public class SessionThread extends AsyncTask<String , Integer, String> {
 
     private Exception exception;
     Session session;
@@ -29,7 +34,13 @@ public class SessionThread extends AsyncTask<String , Session, String> {
     String password;
     String host;
     int timeout;
-    boolean initialized;
+    Context context;
+
+    public boolean isInitialized() {
+        return session.isConnected();
+    }
+
+    private boolean initialized;
     boolean kill = false;
     HashMap<String, Command> commandHashMap;
 
@@ -37,11 +48,12 @@ public class SessionThread extends AsyncTask<String , Session, String> {
         kill = true;
     }
 
-    public SessionThread(String username, String password, String host){
+    public SessionThread(String username, String password, String host, Context context){
         this.username = username;
         this.password = password;
         this.host = host;
         this.session = null;
+        this.context = context;
     }
 
     public Session getSession(){
@@ -55,23 +67,34 @@ public class SessionThread extends AsyncTask<String , Session, String> {
 
 
     @Override
-    protected void onProgressUpdate(Session... values) {
-        super.onProgressUpdate(values);
-
+    protected void onProgressUpdate(Integer... value) {
+        super.onProgressUpdate(value);
+        if(value[0] == 1){
+            Toast.makeText(context,
+                    "Session Initialized", Toast.LENGTH_LONG).show();
+            //((Commands) context).updateTemperature("Temp");
+            //TextView temp
+        }
+        if(value[0] == 2){
+            Toast.makeText(context,
+                    "Session Disconected", Toast.LENGTH_LONG).show();
+            //((Commands) context).temperature.setText("echo Temperature=24C");
+        }
 
 
     }
 
+
     @Override
     protected String doInBackground(String... strings) {
         try{
-
+            jsch = new JSch(); // THIS WASN'T HERE BEFORE
             Log.e("ssh", "get here 12 " + strings[0]);
 //            Log.e("ssh", "" + params[0] + params[1] + params[2]);
             session = jsch.getSession(username, host, 22);
-
+            Log.e("ssh", "get here 13 " + strings[0]);
             session.setPassword(password);
-
+            Log.e("ssh", "get here 14 " + strings[0]);
             // set some vanilla properties for the connection
             //TODO: more customized ssh connection properties
             Properties properties = new Properties();
@@ -83,18 +106,20 @@ public class SessionThread extends AsyncTask<String , Session, String> {
             if(session.isConnected()){
                 Log.e("ssh", "connection success");
                 initialized = true;
+                publishProgress(1);
                 //proceed = true;
                 //return true;
                 while(kill == false){
                     //Loop
-                    Log.e("ssh", "get here ");
+                    //Log.e("ssh", "get here ");
 
                 }
             }
+            publishProgress(2);
             return "complete";
         }
         catch (JSchException e) {
-            Log.e("ssh", "expection"+e.toString());
+            Log.e("ssh", "expection" + e.toString());
 
             e.printStackTrace();
             //return false;
@@ -103,4 +128,53 @@ public class SessionThread extends AsyncTask<String , Session, String> {
     }
 
 
+    public String runCommand(String command){
+        try{
+            Channel channel= session.openChannel("exec");
+            ((ChannelExec)channel).setCommand(command);
+
+            channel.setInputStream(null);
+
+            ((ChannelExec)channel).setErrStream(System.err);
+
+            InputStream in=channel.getInputStream();
+            OutputStream out=channel.getOutputStream();
+
+            channel.connect();
+
+            out.write(command.getBytes());
+            out.flush();
+            String response = "";
+            byte[] tmp=new byte[1024];
+            while(true){
+                while(in.available()>0){
+                    int i=in.read(tmp, 0, 1024);
+                    if(i<0)break;
+                    String newChars = new String(tmp, 0, i);
+                    response += newChars;
+                    System.out.print(new String(tmp, 0, i));
+//                        Log.e("ssh", new String(tmp, 0, i));
+                    Log.e("ssh", response);
+                }
+                if(channel.isClosed()){
+                    System.out.println("exit-status: "+channel.getExitStatus());
+                    break;
+                }
+                try{Thread.sleep(1000);}catch(Exception ee){}
+            }
+            channel.disconnect();
+//                Log.e("ssh", "the last pid is " + this.getLastPid());
+            return response;
+        }catch (JSchException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            Log.e("ssh", "it don't work");
+            e1.printStackTrace();
+        } catch (Exception e) {
+            Log.e("ssh", e.toString()+"HERE");
+            e.printStackTrace();
+
+        }
+        return "";
+    }
 }

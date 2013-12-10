@@ -1,28 +1,15 @@
 package com.example.remotelight;
 
-import android.app.IntentService;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
-import com.example.remotelight.Command;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Properties;
 
 /**
  * Created by thebeagle on 11/16/13.
@@ -90,7 +77,7 @@ public class SSHService extends Service {
         this.username = intent.getStringExtra("username");
         this.password = intent.getStringExtra("password");
         this.host = intent.getStringExtra("host");
-        this.sessionController = new SessionController(username, password, host);
+        //this.sessionController = new SessionController(username, password, host);
 
 
         return -1;
@@ -147,7 +134,7 @@ public class SSHService extends Service {
     }
 
     public void sshLogin(String host, String username, String password){
-        sessionController = new SessionController(username, password, host);
+        //sessionController = new SessionController(username, password, host);
         Log.e("ssh", "session hopefully logged in");
     }
 

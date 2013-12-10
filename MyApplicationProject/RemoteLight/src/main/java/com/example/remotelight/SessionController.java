@@ -1,5 +1,6 @@
 package com.example.remotelight;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.jcraft.jsch.Channel;
@@ -30,6 +31,12 @@ public class SessionController implements Serializable{
     String password;
     String host;
     int timeout;
+    Context context;
+
+    public boolean isInitialized() {
+        return sessionThread.isInitialized();
+    }
+
     boolean initialized;
     SessionThread sessionThread;
 
@@ -37,13 +44,14 @@ public class SessionController implements Serializable{
 
 
 
-    public SessionController(String username, String password, String host){
+    public SessionController(String username, String password, String host, Context context){
         this.username = username;
         this.password = password;
         this.host = host;
         this.jsch = new JSch();
         this.timeout = 0;
         this.initialized = false;
+        this.context = context;
         this.commandHashMap = new HashMap<String, Command>();
     }
 
@@ -75,12 +83,17 @@ public class SessionController implements Serializable{
         this.sessionThread = sessionThread;
     }
 
+
+
     public void initSession() {
         //attempt to start an ssh session and create a shell for further commands
-
+        sessionThread = new SessionThread(username,password,host, context);
+        sessionThread.execute("str","str","str");
         while(sessionThread.getSession() == null){
             try{Thread.sleep(1000); Log.e("ssh", "waiting");}catch(Exception ee){}
         }
+        session = sessionThread.getSession();
+
         if(session.isConnected()){
             initialized = true;
         }

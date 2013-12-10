@@ -32,11 +32,11 @@ public class ShellAsyncTask extends AsyncTask<String , String, String> {
     }
 
     protected String doInBackground(String... commands) {
-        SessionController sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
+        //SessionController sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
         boolean isInitialized = false;//sessionController.initSession();
         if(isInitialized){
             Log.e("ssh", "session was initialized");
-            sessionController.runCommand(commands[0]);
+            //sessionController.runCommand(commands[0]);
 //            sessionController.runCommand("echo $!");
         }
         else{

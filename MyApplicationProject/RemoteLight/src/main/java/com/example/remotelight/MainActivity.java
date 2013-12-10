@@ -1,7 +1,6 @@
 package com.example.remotelight;
 
 import android.app.Activity;
-import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,11 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 public class MainActivity extends Activity {
     //TODO: fix all the permissions for the variables
     EditText etIp;
     EditText etUsername;
     EditText etPassword;
+    Parameters parameters;
     TextView resultTextView;
     Button sendCommandButton;
     SessionController sessionController;
@@ -37,7 +39,7 @@ public class MainActivity extends Activity {
         setViewVariables();
         setClickListeners();
 
-
+        /*
         Intent serviceStartIntent = new Intent(this, SSHService.class);
         serviceStartIntent.putExtra("username", etUsername.getText().toString());
         serviceStartIntent.putExtra("password", etPassword.getText().toString());
@@ -49,7 +51,7 @@ public class MainActivity extends Activity {
         initReceiver();
         sshBroadcastReceiver = new SSHReceiver();
         Log.e("ssh", "does it get before the async task");
-        doBindService();
+        doBindService();*/
     }
 
 
@@ -122,15 +124,18 @@ public class MainActivity extends Activity {
         sendCommandButton = (Button) findViewById(R.id.sendCommandButton);
 
 
-        etIp.setText("192.168.1.106");
+        /*etIp.setText("192.168.1.106");
         etUsername.setText("pi");
-        etPassword.setText("foobar");
+        etPassword.setText("foobar");*/
+        etIp.setText("192.168.43.171");
+        etUsername.setText("pcduino");
+        etPassword.setText("honig08");
     }
 
     public void initializeSessionController(){
-        sessionController = new SessionController("pcduino", "honig08", "192.168.43.171");
+        //sessionController = new SessionController("pcduino", "honig08", "192.168.43.171");
         //sessionController = new SessionController("mathilda", "foobar", "192.168.1.198");
-        sessionController.initSession();
+       // sessionController.initSession();
         //sessionController.runCommand("ps ax | tail");
     }
 
@@ -153,8 +158,16 @@ public class MainActivity extends Activity {
                 etIp = (EditText) findViewById(R.id.etIp);
                 etUsername = (EditText) findViewById(R.id.etUsername);
                 etPassword = (EditText) findViewById(R.id.etPassword);
-
-                if(isBound){
+                Log.e("ssh", "Here got1");
+                parameters = new Parameters(etUsername.getText().toString(),etPassword.getText().toString(),etIp.getText().toString());
+                Log.e("ssh", "Here got2");
+                Intent i = new Intent(MainActivity.this, Commands.class);
+                Log.e("ssh", "Here got3");
+                //Bundle b = i.getExtras();
+                i.putExtra("parameters", (Serializable) parameters); //geting NullPointerException here
+                startActivityForResult(i, 0);
+                Log.e("ssh", "Here got4");
+                /*if(isBound){
                     Log.e("ssh", "get here 5");
                     sshService.setSessionData(etUsername.getText().toString(), etPassword.getText().toString(), etIp.getText().toString());
                     sshService.setSessionThread(sessionThread);
@@ -163,7 +176,7 @@ public class MainActivity extends Activity {
 
                     sshService.runCommand("will this work");
                 }
-
+                */
 
 
 //                sessionController.runCommand("echo lindo");

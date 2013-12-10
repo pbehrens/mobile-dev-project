@@ -8,7 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity"
     style="@android:style/Theme.Holo"
-    >
+    android:background="@drawable/abc_ab_stacked_solid_dark_holo">
 
 
 
@@ -71,7 +71,8 @@
                 android:id="@+id/etIp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="0dp"
-                style="@android:style/Theme.Holo" />
+                style="@android:style/Theme.Holo"
+                android:textColor="#ffffff" />
             </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
@@ -96,7 +97,8 @@
                 android:id="@+id/etUsername"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="0dp"
-                style="@style/AppBaseTheme" />
+                style="@style/AppBaseTheme"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
         <LinearLayout
@@ -121,7 +123,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:id="@+id/etPassword" />
+                android:id="@+id/etPassword"
+                android:textColor="#ffff" />
         </LinearLayout>
 
 
