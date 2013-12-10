@@ -72,7 +72,7 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
         if(value[0] == 1){
             Toast.makeText(context,
                     "Session Initialized", Toast.LENGTH_LONG).show();
-            //((Commands) context).updateTemperature("Temp");
+            //((Commands) context).init = true;
             //TextView temp
         }
         if(value[0] == 2){

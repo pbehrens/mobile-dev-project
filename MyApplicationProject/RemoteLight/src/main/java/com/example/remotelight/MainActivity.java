@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
         /*etIp.setText("192.168.1.106");
         etUsername.setText("pi");
         etPassword.setText("foobar");*/
-        etIp.setText("192.168.43.171");
+        etIp.setText("192.168.1.179");
         etUsername.setText("pcduino");
         etPassword.setText("honig08");
     }
