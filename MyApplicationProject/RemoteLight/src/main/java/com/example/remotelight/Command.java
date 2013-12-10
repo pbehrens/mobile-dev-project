@@ -1,7 +1,7 @@
 package com.example.remotelight;
 
 /**
- * Created by thebeagle on 11/2/13.
+ * Created by Patrick berhens on 11/2/13.
  */
 public class Command {
     private String name;

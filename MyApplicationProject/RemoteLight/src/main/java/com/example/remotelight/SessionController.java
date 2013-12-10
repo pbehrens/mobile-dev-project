@@ -138,7 +138,6 @@ public class SessionController implements Serializable{
                     try{Thread.sleep(1000);}catch(Exception ee){}
                 }
                 channel.disconnect();
-//                Log.e("ssh", "the last pid is " + this.getLastPid());
                 return response;
             }catch (JSchException e1) {
                 e1.printStackTrace();
