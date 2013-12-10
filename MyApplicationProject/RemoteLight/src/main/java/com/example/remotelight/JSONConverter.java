@@ -3,8 +3,7 @@ package com.example.remotelight;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.Map;
-import com.example.remotelight.Command;
+
 import org.json.*;
 
 

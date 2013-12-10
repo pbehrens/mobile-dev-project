@@ -11,6 +11,9 @@ import com.jcraft.jsch.Session;
 
 import java.util.HashMap;
 
+import edu.luc.plutarcobehrens.remotelight.SessionController;
+import edu.luc.plutarcobehrens.remotelight.SessionThread;
+
 
 /**
  COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.

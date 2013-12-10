@@ -1,4 +1,4 @@
-package com.example.remotelight;
+package edu.luc.plutarcobehrens.remotelight;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
+
+import com.example.remotelight.Command;
 
 
 /**

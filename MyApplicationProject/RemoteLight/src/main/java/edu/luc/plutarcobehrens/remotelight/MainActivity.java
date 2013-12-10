@@ -1,4 +1,4 @@
-package com.example.remotelight;
+package edu.luc.plutarcobehrens.remotelight;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -10,15 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.remotelight.R;
 import com.example.remotelight.SSHService;
 
 import java.io.Serializable;
-
-import edu.luc.plutarcobehrens.remotelight.Commands;
-import edu.luc.plutarcobehrens.remotelight.SessionController;
-import edu.luc.plutarcobehrens.remotelight.SessionThread;
-
-
 
 /**
  COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
@@ -26,12 +21,13 @@ import edu.luc.plutarcobehrens.remotelight.SessionThread;
  @author <rplutarco>
  @version <1.0> <date:2013-12-9>
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
+
     //TODO: fix all the permissions for the variables
     EditText etIp;
     EditText etUsername;
     EditText etPassword;
-    //Parameters parameters;
+    Parameters parameters;
     TextView resultTextView;
     Button sendCommandButton;
     SessionController sessionController;
@@ -60,7 +56,7 @@ public class MainActivity extends Activity {
 
     public void setViewVariables(){
 
-       //set variables used for manipulating the view
+        //set variables used for manipulating the view
         etIp = (EditText) findViewById(R.id.etIp);
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -85,10 +81,10 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                //parameters = new Parameters(etUsername.getText().toString(),etPassword.getText().toString(),etIp.getText().toString());
+                parameters = new Parameters(etUsername.getText().toString(),etPassword.getText().toString(),etIp.getText().toString());
                 Intent i = new Intent(MainActivity.this, Commands.class);
                 //Bundle b = i.getExtras();
-                //i.putExtra("parameters", (Serializable) parameters); //geting NullPointerException here
+                i.putExtra("parameters", (Serializable) parameters); //geting NullPointerException here
                 startActivityForResult(i, 0);
             }
         });

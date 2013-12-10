@@ -1,8 +1,9 @@
-package com.example.remotelight;
+package edu.luc.plutarcobehrens.remotelight;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.example.remotelight.Command;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;

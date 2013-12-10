@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import edu.luc.plutarcobehrens.remotelight.SessionController;
+
 /**
  COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
  Run SSH commands that will turn on the lamp and test if the lamp is available

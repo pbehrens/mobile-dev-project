@@ -1,4 +1,4 @@
-package com.example.remotelight;
+package edu.luc.plutarcobehrens.remotelight;
 
 import java.io.Serializable;
 
