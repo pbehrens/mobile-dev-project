@@ -63,9 +63,6 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
         return session;
     }
 
-
-
-
     @Override
     protected void onProgressUpdate(Integer... value) {
         super.onProgressUpdate(value);
@@ -80,8 +77,6 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
                     "Session Disconected", Toast.LENGTH_LONG).show();
             //((Commands) context).temperature.setText("echo Temperature=24C");
         }
-
-
     }
 
 
@@ -89,12 +84,8 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
     protected String doInBackground(String... strings) {
         try{
             jsch = new JSch(); // THIS WASN'T HERE BEFORE
-            Log.e("ssh", "get here 12 " + strings[0]);
-//            Log.e("ssh", "" + params[0] + params[1] + params[2]);
             session = jsch.getSession(username, host, 22);
-            Log.e("ssh", "get here 13 " + strings[0]);
             session.setPassword(password);
-            Log.e("ssh", "get here 14 " + strings[0]);
             // set some vanilla properties for the connection
             //TODO: more customized ssh connection properties
             Properties properties = new Properties();
@@ -107,12 +98,8 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
                 Log.e("ssh", "connection success");
                 initialized = true;
                 publishProgress(1);
-                //proceed = true;
-                //return true;
-                while(kill == false){
-                    //Loop
-                    //Log.e("ssh", "get here ");
 
+                while(kill == false){
                 }
             }
             publishProgress(2);
@@ -120,7 +107,6 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
         }
         catch (JSchException e) {
             Log.e("ssh", "expection" + e.toString());
-
             e.printStackTrace();
             //return false;
         }
@@ -163,7 +149,6 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
                 try{Thread.sleep(1000);}catch(Exception ee){}
             }
             channel.disconnect();
-//                Log.e("ssh", "the last pid is " + this.getLastPid());
             return response;
         }catch (JSchException e1) {
             e1.printStackTrace();

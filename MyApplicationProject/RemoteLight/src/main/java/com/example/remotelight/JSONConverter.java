@@ -7,7 +7,7 @@ import java.util.Map;
 import com.example.remotelight.Command;
 import org.json.*;
 /**
- * Created by thebeagle on 11/2/13.
+ * Created by Patrick Behrens on 11/2/13.
  */
 public class JSONConverter {
 

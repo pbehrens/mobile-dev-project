@@ -1,17 +1,12 @@
 package com.example.remotelight;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 /**
- * Created by thebeagle on 11/17/13.
+ * Created by Patrick Behrens on 11/17/13.
  */
 public class SSHReceiver extends BroadcastReceiver {
 

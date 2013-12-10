@@ -32,11 +32,6 @@ public class Commands extends Activity {
         Log.e("ssh", "I GOOOOT");
         initilizeButtons();
         initializeSession();
-
-
-        //sessionOpen = (SessionController) i.getParcelableExtra("SessionController");
-
-
     }
 
     private void initializeSession() {

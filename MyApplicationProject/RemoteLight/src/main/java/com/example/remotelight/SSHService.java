@@ -12,7 +12,7 @@ import com.jcraft.jsch.Session;
 import java.util.HashMap;
 
 /**
- * Created by thebeagle on 11/16/13.
+ * Created by Patrick Behrens on 11/16/13.
  */
 
 public class SSHService extends Service {
