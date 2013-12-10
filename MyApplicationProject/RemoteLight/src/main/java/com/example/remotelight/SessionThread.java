@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -35,9 +34,10 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
     String host;
     int timeout;
     Context context;
+    Commands commands;
 
     public boolean isInitialized() {
-        return session.isConnected();
+        return initialized;
     }
 
     private boolean initialized;
@@ -54,6 +54,7 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
         this.host = host;
         this.session = null;
         this.context = context;
+        this.initialized = false;
     }
 
     public Session getSession(){
@@ -115,6 +116,7 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
 
                 }
             }
+            initialized = false;
             publishProgress(2);
             return "complete";
         }
@@ -138,40 +140,35 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
             ((ChannelExec)channel).setErrStream(System.err);
 
             InputStream in=channel.getInputStream();
-            OutputStream out=channel.getOutputStream();
+            //OutputStream out=channel.getOutputStream();
 
             channel.connect();
 
-            out.write(command.getBytes());
-            out.flush();
+            //out.write(command.getBytes());
+            //out.flush();
             String response = "";
-            byte[] tmp=new byte[1024];
+            byte[] tmp = new byte[1024];
             while(true){
-                while(in.available()>0){
-                    int i=in.read(tmp, 0, 1024);
-                    if(i<0)break;
+                while(in.available() > 0 ){
+                    int i = in.read(tmp, 0, 1024);
+                    if(i<0){
+                        break;
+                    }
                     String newChars = new String(tmp, 0, i);
                     response += newChars;
-                    System.out.print(new String(tmp, 0, i));
-//                        Log.e("ssh", new String(tmp, 0, i));
-                    Log.e("ssh", response);
                 }
                 if(channel.isClosed()){
-                    System.out.println("exit-status: "+channel.getExitStatus());
                     break;
                 }
-                try{Thread.sleep(1000);}catch(Exception ee){}
+
             }
             channel.disconnect();
-//                Log.e("ssh", "the last pid is " + this.getLastPid());
             return response;
         }catch (JSchException e1) {
             e1.printStackTrace();
         } catch (IOException e1) {
-            Log.e("ssh", "it don't work");
             e1.printStackTrace();
         } catch (Exception e) {
-            Log.e("ssh", e.toString()+"HERE");
             e.printStackTrace();
 
         }

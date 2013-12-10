@@ -35,14 +35,11 @@ public class Commands extends Activity {
         initilizeButtons();
         initializeSession();
 
-
-        //sessionOpen = (SessionController) i.getParcelableExtra("SessionController");
-
-
     }
 
     private void initializeSession() {
-        sessionController = new SessionController(parameters.getUser(),parameters.getPassword(),parameters.getHost(),getApplicationContext());
+        sessionController = new SessionController(parameters.getUser(),parameters.getPassword(),parameters.getHost()
+                ,getApplicationContext());
         sessionController.initSession();
     }
 
@@ -51,16 +48,16 @@ public class Commands extends Activity {
         back = (Button) findViewById(R.id.button);
         select = (Button) findViewById(R.id.button2);
         bulb = (ImageButton) findViewById(R.id.bulbButton);
-        Log.e("ssh", "I GOOOOT1");
+
         Bundle b = getIntent().getExtras();
-        Log.e("ssh", "I GOOOOT2");
         parameters = (Parameters) b.getSerializable("parameters"); //geting NullPointerException here
-        Log.e("ssh", "I GOOOOT"+parameters.getPassword());
+
         bulbOff = R.drawable.bulboff;
         bulbOn = R.drawable.onlight;
+
         bulb.setTag("Off");
         bulb.setImageResource(bulbOff);
-        //temperature.setText("TEMPERATURA");
+
     }
 
     @Override
@@ -85,13 +82,12 @@ public class Commands extends Activity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //sessionOpen.runCommand("echo lindo");
-                Log.e("ssh","Get");
                 sessionController.disconnect();
                 finish();
             }
         });
+
+
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,10 +102,6 @@ public class Commands extends Activity {
                         bulb.setImageResource(bulbOff);
                     }
 
-
-                //Intent i;
-                //i = new Intent(Commands.this, RunningCommand.class);
-                //startActivity(i);
                 }
                 else{
                     Toast.makeText(getApplicationContext(),
@@ -117,21 +109,27 @@ public class Commands extends Activity {
                 }
             }
         });
+
+
         bulb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bulb.getTag().equals("Off")){
-                    bulb.setImageResource(bulbOn);
-                    bulb.setTag("On");
+                if(sessionController.isInitialized()){
+                    if(bulb.getTag().equals("Off")){
+                        bulb.setImageResource(bulbOn);
+                        bulb.setTag("On");
+                    }
+                    else{
+                        bulb.setImageResource(bulbOff);
+                        bulb.setTag("Off");
+                    }
+                    sessionController.runCommand("python turn_on_led.py");
                 }
                 else{
-                    bulb.setImageResource(bulbOff);
-                    bulb.setTag("Off");
+                    Toast.makeText(getApplicationContext(),
+                            "Wait a Little bit", Toast.LENGTH_LONG).show();
                 }
-                sessionController.runCommand("python turn_on_led.py");
-                //Intent i;
-                //i = new Intent(Commands.this, RunningCommand.class);
-                //startActivity(i);
+
             }
         });
 
