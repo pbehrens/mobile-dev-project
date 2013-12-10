@@ -18,8 +18,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
+
 /**
- * Created by Ranulfo on 11/3/13.
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+A thread that keeps the SSh session open so commands can be sent to the server.
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class SessionThread extends AsyncTask<String , Integer, String> {
 

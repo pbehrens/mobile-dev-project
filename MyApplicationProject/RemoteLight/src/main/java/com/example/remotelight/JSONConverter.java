@@ -6,8 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.remotelight.Command;
 import org.json.*;
+
+
 /**
- * Created by Patrick Behrens on 11/2/13.
+ COPYRIGHT (C) <2013> <pbehrens>. All Rights Reserved.
+ Unused JSOn parsing converter that was going to be used to parse lists of optional commands for the mobilew device to use on the server.
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class JSONConverter {
 

@@ -6,7 +6,10 @@ import android.view.View;
 import android.widget.ImageButton;
 
 /**
- * Created by Ranulfo on 11/11/13.
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ Run SSH commands that will turn on the lamp and test if the lamp is available
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class RunningCommand extends Activity {
     ImageButton imgButton;

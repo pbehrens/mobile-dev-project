@@ -10,8 +10,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 /**
- * Created by Ranulfo on 11/3/13.
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ Controls the SSH session thread that is initialized within and allows for a continuous connection
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class Commands extends Activity {
     Button back;

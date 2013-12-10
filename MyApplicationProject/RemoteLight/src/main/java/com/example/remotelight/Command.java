@@ -1,7 +1,11 @@
 package com.example.remotelight;
 
+
 /**
- * Created by Patrick berhens on 11/2/13.
+ COPYRIGHT (C) <2013> <pbehrens>. All Rights Reserved.
+ Unused command object that was going to be created by the JSON parsing converter.
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class Command {
     private String name;

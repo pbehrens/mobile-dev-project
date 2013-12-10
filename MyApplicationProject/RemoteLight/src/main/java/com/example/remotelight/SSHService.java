@@ -11,10 +11,13 @@ import com.jcraft.jsch.Session;
 
 import java.util.HashMap;
 
-/**
- * Created by Patrick Behrens on 11/16/13.
- */
 
+/**
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+Failed code that was supposed to run the SSH session as a service so things could be communicated between activities better
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
+ */
 public class SSHService extends Service {
 
     private static final String ACTION = "com.example.remotelight.COMMAND_SENT";

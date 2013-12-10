@@ -2,8 +2,12 @@ package com.example.remotelight;
 
 import java.io.Serializable;
 
+
 /**
- * Created by Ranulfo on 12/9/13.
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ Serializable paramter object thjat allows for data to be transferred between activities
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class Parameters implements Serializable {
 

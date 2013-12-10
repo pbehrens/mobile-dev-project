@@ -5,8 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+
 /**
- * Created by Patrick Behrens on 11/17/13.
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+Failed attempt as using a broadcast receiver to make the project fancier
+ @author <pbehrens>
+ @version <1.0> <date:2013-12-9>
  */
 public class SSHReceiver extends BroadcastReceiver {
 

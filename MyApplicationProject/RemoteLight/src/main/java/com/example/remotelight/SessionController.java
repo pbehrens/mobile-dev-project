@@ -18,7 +18,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- * Created by thebeagle on 11/2/13.
+ COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+Controls the SSH session thread that is initialized within and allows for a continuous connection
+ @author <rplutarco>
+ @version <1.0> <date:2013-12-9>
  */
 public class SessionController implements Serializable{
     private Exception exception;
