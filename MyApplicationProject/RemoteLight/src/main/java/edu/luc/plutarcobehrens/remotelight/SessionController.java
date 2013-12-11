@@ -47,7 +47,16 @@ public class SessionController implements Serializable{
     HashMap<String, Command> commandHashMap;
 
 
+    /**
+     Constructor for creating a session controller given the provided username, passwoird and host. Sets up the JSCH library controllers also
+     @param <username>
+     @param <password>
+     @param <host>
+     @param <context>
 
+
+     @return new instance of a Session Controller()
+     */
     public SessionController(String username, String password, String host, Context context){
         this.username = username;
         this.password = password;
@@ -59,6 +68,9 @@ public class SessionController implements Serializable{
         this.commandHashMap = new HashMap<String, Command>();
     }
 
+    /**
+     Blank constructor for session controller sets all class variables to null and allows for them to be set in an other fashion
+     */
     public SessionController(){
         this.username = null;
         this.password = null;
@@ -69,6 +81,11 @@ public class SessionController implements Serializable{
         this.commandHashMap = new HashMap<String, Command>();
     }
 
+    /**
+        Check to see if the host username and password are set
+
+     * @return boolean value of if the host password and username are not null
+     */
     public boolean checkHostUserPassword(){
         if(username == null || password == null || host == null){
             return false;
@@ -76,6 +93,11 @@ public class SessionController implements Serializable{
         return true;
     }
 
+    /**
+     * Returns the current session if it is connected else it returns null
+     *
+     * @return Session or null
+     */
     public Session getSession(){
         if(session.isConnected()){
             return session;
@@ -83,16 +105,23 @@ public class SessionController implements Serializable{
         return null;
     }
 
+    /**
+     * Sets the session thread for the controller
+     * @param sessionThread
+     */
     public void setSessionThread(SessionThread sessionThread){
         this.sessionThread = sessionThread;
     }
 
-
-
+    /**
+        Attempt to start an ssh session and create a shell for further commands
+        If the session is created the initialized class variable will be set accordingly
+     */
     public void initSession() {
         //attempt to start an ssh session and create a shell for further commands
         sessionThread = new SessionThread(username,password,host, context);
         sessionThread.execute("str","str","str");
+        //wait until the session class variable is not null
         while(sessionThread.getSession() == null){
             try{Thread.sleep(1000); Log.e("ssh", "waiting");}catch(Exception ee){}
         }
@@ -107,6 +136,11 @@ public class SessionController implements Serializable{
 
     }
 
+    /**
+     *
+     * @param command // what is to be sent to the ssh server
+     * @return response //the response from the server or an empty string if something went wrong
+     */
     public String runCommand(String command){
             try{
                 Channel channel= session.openChannel("exec");
@@ -156,14 +190,26 @@ public class SessionController implements Serializable{
         return "";
     }
 
+    /**
+        Disconnect the session
+     */
     public void disconnect(){
         sessionThread.disconnectSession();
     }
 
+    /**
+     * Check if the connection is sitll up
+     * @return // boolean value of session state
+     */
     public boolean isUp(){
         return session.isConnected();
     }
 
+    /**
+     * Method used for retrieving the commnad list from the server
+     *
+     * @return The command list JSON file contents
+     */
     public String getCommandList(){
         if(initialized == true){
             String commandList = this.runCommand("echo ./commands.json");

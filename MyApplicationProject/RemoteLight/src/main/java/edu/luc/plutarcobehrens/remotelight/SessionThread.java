@@ -41,19 +41,18 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
     int timeout;
     Context context;
     Commands commands;
-
-    public boolean isInitialized() {
-        return initialized;
-    }
-
     private boolean initialized;
     boolean kill = false;
     HashMap<String, Command> commandHashMap;
 
-    public void disconnectSession(){
-        kill = true;
-    }
-
+    /**
+     * Creates a session thread that stays alive between commands
+     * Used to keep session alive if activty changes as well
+     * @param username
+     * @param password
+     * @param host
+     * @param context
+     */
     public SessionThread(String username, String password, String host, Context context){
         this.username = username;
         this.password = password;
@@ -63,6 +62,25 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
         this.initialized = false;
     }
 
+    /**
+     * Check if controller is initialized
+     * @return initialized state of controller
+     */
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    /**
+     * Disconnect the session by ending the while loop
+     */
+    public void disconnectSession(){
+        kill = true;
+    }
+
+    /**
+     * returns the current session or else null
+     * @return current session
+     */
     public Session getSession(){
         if(session == null){
             return null;
@@ -70,19 +88,24 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
         return session;
     }
 
+
+    /**
+     * Show updates on the SSh session through Toast
+     * @param value //dummy value needed for async task
+     */
     @Override
     protected void onProgressUpdate(Integer... value) {
         super.onProgressUpdate(value);
+        //show if session initialized
         if(value[0] == 1){
             Toast.makeText(context,
                     "Session Initialized", Toast.LENGTH_LONG).show();
-            //((Commands) context).init = true;
-            //TextView temp
+
         }
+        //show if not initialized
         if(value[0] == 2){
             Toast.makeText(context,
                     "Session Disconected", Toast.LENGTH_LONG).show();
-            //((Commands) context).temperature.setText("echo Temperature=24C");
         }
     }
 
@@ -94,7 +117,7 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
             session = jsch.getSession(username, host, 22);
             session.setPassword(password);
             // set some vanilla properties for the connection
-            //TODO: more customized ssh connection properties
+
             Properties properties = new Properties();
             properties.put("StrictHostKeyChecking", "no");
             session.setConfig(properties);
@@ -122,48 +145,5 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
     }
 
 
-    public String runCommand(String command){
-        try{
-            Channel channel= session.openChannel("exec");
-            ((ChannelExec)channel).setCommand(command);
-
-            channel.setInputStream(null);
-
-            ((ChannelExec)channel).setErrStream(System.err);
-
-            InputStream in=channel.getInputStream();
-            //OutputStream out=channel.getOutputStream();
-
-            channel.connect();
-
-            //out.write(command.getBytes());
-            //out.flush();
-            String response = "";
-            byte[] tmp = new byte[1024];
-            while(true){
-                while(in.available() > 0 ){
-                    int i = in.read(tmp, 0, 1024);
-                    if(i<0){
-                        break;
-                    }
-                    String newChars = new String(tmp, 0, i);
-                    response += newChars;
-                }
-                if(channel.isClosed()){
-                    break;
-                }
-
-            }
-            channel.disconnect();
-            return response;
-        }catch (JSchException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        return "";
-    }
+    
 }

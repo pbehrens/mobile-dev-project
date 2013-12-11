@@ -30,11 +30,6 @@ public class MainActivity extends Activity{
     Parameters parameters;
     TextView resultTextView;
     Button sendCommandButton;
-    SessionController sessionController;
-    BroadcastReceiver sshBroadcastReceiver;
-    private SSHService sshService;
-    boolean isBound;
-    SessionThread sessionThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +49,10 @@ public class MainActivity extends Activity{
         super.onResume();
     }
 
+    /**
+        Gives values to th e instance variables inside this class for the view. Also sets the default text for host username and password
+     */
     public void setViewVariables(){
-
         //set variables used for manipulating the view
         etIp = (EditText) findViewById(R.id.etIp);
         etUsername = (EditText) findViewById(R.id.etUsername);
@@ -75,16 +72,19 @@ public class MainActivity extends Activity{
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
+    /**
+     Sets the listener for the connect button that will then launch the next activity
+     */
     public void setClickListeners(){
         sendCommandButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                //create new parameter object that is serialized and sent to the next activity
                 parameters = new Parameters(etUsername.getText().toString(),etPassword.getText().toString(),etIp.getText().toString());
                 Intent i = new Intent(MainActivity.this, Commands.class);
-                //Bundle b = i.getExtras();
-                i.putExtra("parameters", (Serializable) parameters); //geting NullPointerException here
+                i.putExtra("parameters", (Serializable) parameters);
+
                 startActivityForResult(i, 0);
             }
         });

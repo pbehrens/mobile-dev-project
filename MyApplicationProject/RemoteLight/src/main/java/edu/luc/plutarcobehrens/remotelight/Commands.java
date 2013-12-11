@@ -40,12 +40,19 @@ public class Commands extends Activity {
 
     }
 
+    /**
+     * Initalize the SSH session controller and initialize the SSH session inside of the controller
+     */
     private void initializeSession() {
         sessionController = new SessionController(parameters.getUser(),parameters.getPassword(),parameters.getHost()
                 ,getApplicationContext());
+
         sessionController.initSession();
     }
 
+    /**
+     * Initilialize the buttons for the activity
+     */
     private void initilizeButtons(){
         temperature = (TextView) findViewById(R.id.textTemperature);
         back = (Button) findViewById(R.id.button);
@@ -63,6 +70,9 @@ public class Commands extends Activity {
 
     }
 
+    /**
+     * If the activity crashes or goes to sleep reset the button listeners
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,18 +80,28 @@ public class Commands extends Activity {
 
     }
 
+    /**
+     * Disconnect the sessioncontroller on destroy so a bunch of open SSH sessions dont happen
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         sessionController.disconnect();
     }
 
+    /**
+     * Update the temperature class variable
+     * @param temp
+     */
     public void updateTemperature(String temp){
         temperature.setText(temp);
-
     }
 
+    /**
+     * Set the listener for the back button and refresh button
+     */
     private void buttonListeners() {
+        //if this button is clicked the session will disconnect and the main activty willl be started
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,10 +110,11 @@ public class Commands extends Activity {
             }
         });
 
-
+        // set listener for the refresh button
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if session controller is initiolized and then send command to get updated info
                 if(sessionController.isInitialized()){
                     String[] result;
                     result = sessionController.runCommand("python testLight.py").split("/");
@@ -113,10 +134,11 @@ public class Commands extends Activity {
             }
         });
 
-
+        //Send command for bulb turning on or off and update the image accordingly
         bulb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check for ssh session initialization and update bulb image
                 if(sessionController.isInitialized()){
                     if(bulb.getTag().equals("Off")){
                         bulb.setImageResource(bulbOn);
@@ -132,12 +154,7 @@ public class Commands extends Activity {
                     Toast.makeText(getApplicationContext(),
                             "Wait a Little bit", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
-
-
     }
-
-
 }
