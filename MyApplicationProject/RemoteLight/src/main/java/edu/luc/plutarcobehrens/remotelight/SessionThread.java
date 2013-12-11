@@ -22,28 +22,22 @@ import com.example.remotelight.Command;
 
 
 /**
- COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ COPYRIGHT (C) <2013> <plutarcobehrens>. All Rights Reserved.
 A thread that keeps the SSh session open so commands can be sent to the server.
  @author <rplutarco>
  @version <1.0> <date:2013-12-9>
  */
 public class SessionThread extends AsyncTask<String , Integer, String> {
-
     private Exception exception;
     Session session;
-    ByteArrayOutputStream bitArrayOutputStream;
-    ByteArrayInputStream bitArrayInputStream;
-    Channel channel;
     JSch jsch;
     String username;
     String password;
     String host;
     int timeout;
     Context context;
-    Commands commands;
     private boolean initialized;
     boolean kill = false;
-    HashMap<String, Command> commandHashMap;
 
     /**
      * Creates a session thread that stays alive between commands
@@ -145,5 +139,5 @@ public class SessionThread extends AsyncTask<String , Integer, String> {
     }
 
 
-    
+
 }

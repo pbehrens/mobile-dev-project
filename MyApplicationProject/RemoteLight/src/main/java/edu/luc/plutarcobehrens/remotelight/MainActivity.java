@@ -16,7 +16,7 @@ import com.example.remotelight.SSHService;
 import java.io.Serializable;
 
 /**
- COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ COPYRIGHT (C) <2013> <plutarcobehrens>. All Rights Reserved.
  Main Activity that allows for useres to specify a username pass word and host to connect to
  @author <rplutarco>
  @version <1.0> <date:2013-12-9>

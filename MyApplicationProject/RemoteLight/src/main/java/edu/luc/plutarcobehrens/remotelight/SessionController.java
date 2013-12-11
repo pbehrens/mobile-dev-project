@@ -19,17 +19,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ COPYRIGHT (C) <2013> <plutarcobehrens>. All Rights Reserved.
 Controls the SSH session thread that is initialized within and allows for a continuous connection
  @author <rplutarco>
  @version <1.0> <date:2013-12-9>
  */
 public class SessionController implements Serializable{
-    private Exception exception;
     Session session;
-    ByteArrayOutputStream bitArrayOutputStream;
-    ByteArrayInputStream bitArrayInputStream;
-    Channel channel;
     JSch jsch;
     String username;
     String password;
@@ -49,12 +45,10 @@ public class SessionController implements Serializable{
 
     /**
      Constructor for creating a session controller given the provided username, passwoird and host. Sets up the JSCH library controllers also
-     @param <username>
-     @param <password>
-     @param <host>
-     @param <context>
-
-
+     @param username
+     @param password
+     @param host
+     @param context
      @return new instance of a Session Controller()
      */
     public SessionController(String username, String password, String host, Context context){
@@ -143,26 +137,33 @@ public class SessionController implements Serializable{
      */
     public String runCommand(String command){
             try{
+                //open up an exec channel to allow for sending commands
                 Channel channel= session.openChannel("exec");
                 ((ChannelExec)channel).setCommand(command);
 
                 channel.setInputStream(null);
-
+                //set the error stream to the System.err even though android doesnt really use this
                 ((ChannelExec)channel).setErrStream(System.err);
 
+                // set input and output streams for the connection
                 InputStream in=channel.getInputStream();
                 OutputStream out=channel.getOutputStream();
 
                 channel.connect();
-
+                //write out each of the bytes of the command string to out stream
                 out.write(command.getBytes());
                 out.flush();
                 String response = "";
                 byte[] tmp=new byte[1024];
                 while(true){
+                    //if there is something in the input stream
                     while(in.available()>0){
                         int i=in.read(tmp, 0, 1024);
-                        if(i<0)break;
+                        //break look if nothing left to read
+                        if(i<0){
+                            break;
+                        }
+                        //add the new chars to the string
                         String newChars = new String(tmp, 0, i);
                         response += newChars;
                         System.out.print(new String(tmp, 0, i));
@@ -175,12 +176,14 @@ public class SessionController implements Serializable{
                     }
                     try{Thread.sleep(1000);}catch(Exception ee){}
                 }
+                //disconnect when everything is taken from the SSh stgream and then disconnect the channel
                 channel.disconnect();
                 return response;
             }catch (JSchException e1) {
+                Log.e("ssh", e1.toString());
                 e1.printStackTrace();
             } catch (IOException e1) {
-                Log.e("ssh", "it don't work");
+                Log.e("ssh", "An IO exception happened");
                 e1.printStackTrace();
             } catch (Exception e) {
                 Log.e("ssh", e.toString()+"HERE");
@@ -218,10 +221,7 @@ public class SessionController implements Serializable{
         else{
             return "";
         }
-
     }
-
-
 }
 
 

@@ -13,7 +13,7 @@ import com.example.remotelight.R;
 
 
 /**
- COPYRIGHT (C) <2013> <plutarco>. All Rights Reserved.
+ COPYRIGHT (C) <2013> <plutarcobehrens>. All Rights Reserved.
  Controls the SSH session thread that is initialized within and allows for a continuous connection
  @author <rplutarco>
  @version <1.0> <date:2013-12-9>
